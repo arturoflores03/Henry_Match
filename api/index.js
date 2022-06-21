@@ -22,7 +22,18 @@
 //       "*w_________am#####P"   ~9#####mw_________w*"                  
 //           ""9@#####@M""           ""P@#####@M""                    
 
+require('dotenv').config()
+const mongoose = require("mongoose");
+const {MONGO_PASS} = process.env;
 const server = require('./src/app.js');
+// const connectDb = require("./src/db")
 const port = 9000;
+
+mongoose
+    .connect(`mongodb+srv://henrymatch:${MONGO_PASS}@henrymatch.wotfr.mongodb.net/?retryWrites=true&w=majority`)
+    .then(() => console.log("Connected to MongoDB Atlas"))
+    .catch((error) => console.error(error))
+
+
 
 server.listen(port, () => console.log("server listening on " + port))

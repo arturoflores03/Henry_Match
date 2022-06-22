@@ -1,36 +1,16 @@
-import { useState } from "react";
-import Nav from "../components/Nav";
-import AuthModal from "../components/AuthModal";
+import React from 'react'
+import Header from '../components/Header/Header'
+import Card from '../components/Card/Card'
+import ButtonSwipe from '../components/ButtonSwipe/ButtonSwipe'
 
-const Home = () => {
-  const authToken = false;
-  const [showModal, setShowModal] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(true);
-
-  const handleClick = () => {
-    setShowModal(true);
-    setIsSignUp(true);
-  };
-
+function Home() {
   return (
     <div>
-      <Nav
-        authToken={authToken}
-        setShowModal={setShowModal}
-        showModal={showModal}
-        setIsSignUp={setIsSignUp}></Nav>
-      <div className="home-div">
-        <h1>Henry Match</h1>
-        <button className="home-button" onClick={handleClick}>
-          {authToken ? "log in" : "create account"}
-        </button>
-        <p>esto seria todo: una barra, el logo y el boton de registro/login</p>
-        {showModal && (
-          <AuthModal setShowModal={setShowModal} isSignUp={isSignUp} />
-        )}
-      </div>
+        <Header /> 
+        <Card /> 
+        <ButtonSwipe /> 
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

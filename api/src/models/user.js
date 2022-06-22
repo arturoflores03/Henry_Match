@@ -3,19 +3,16 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
     },
     age: {
         type: Number,
-        required: true
     },
     birthday: {
         type: String,
-        required: true
     },
     nickname: {
         type: String,
-        required: true
+        unique: true
     },
     email: {
         type: String,
@@ -25,9 +22,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    role: {
-        type: String,
-        // consultar cual es el fin de esto.
+    premium: {
+        type: Boolean,
+        default: false        
+    },
+    active: {
+        type: Boolean,
+        default: false,        
     },
     image: {
         type: String,
@@ -46,6 +47,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['m1', 'm2', 'm3', 'm4', 'graduate']
     },
+    matches: {
+        type: [String],
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -54,6 +58,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
+
 })
 
 module.exports = mongoose.model('Users', userSchema)

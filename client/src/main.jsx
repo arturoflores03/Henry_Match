@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import OnBoarding from "./pages/OnBoarding";
 import "./index.css";
 import Dashboard from "./pages/Dashboard";
-import Card from  "./components/Card"
+import Card from  "./components/Card/Card"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

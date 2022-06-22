@@ -1,4 +1,4 @@
-.card {
+.tarjeta {
     position: relative;
     width: 600px;
     padding: 20px;
@@ -10,13 +10,13 @@
     box-shadow: 0 20px 25px 0 rgba(0, 0, 0, 0.356);
 }
 
-.card h2 {
+.tarjeta h2 {
     position: absolute;
     bottom: 10px;
     color: white;
 }
 
-.cardsHenry {
+.tarjetasTinder__contenedor{
     display: flex;
     justify-content: center;
     margin-top: 5vh;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Header from '../Header/Header'
 import '../Card/Card.css'
 import CardUser from 'react-tinder-card'
+
 const Card = () => {
     const [user, setUser] = useState([
         {
@@ -16,7 +16,7 @@ const Card = () => {
     ])
   return (
     <div >
-        <Header />
+     
         <div className='tarjetasTinder'>
          <div className='tarjetasTinder__contenedor'>  
             {user.map(p =>(

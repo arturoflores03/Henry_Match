@@ -38,23 +38,17 @@
     color: purple !important;
 }
 
-@media (min-width: 750px){
+/* @media (min-width: 750px){
     .buttonSwipe {
         display: flex;
         width: 45%;
-       /*  position: fixed; */
-        /* justify-content: center; */
+   
         bottom: 3vh;
      padding-left: 380px;
      padding-right: 325px;
         justify-content: space-around;
-        
-        /* height: 1.25rem; */
-       /*  min-width: 2rem; */
-    }
-    /* .buttonSwipe .MuiIconButton-root {
-       
-        font-size: 2rem;
-    }  */
     
-}
+    }
+   
+    
+} */

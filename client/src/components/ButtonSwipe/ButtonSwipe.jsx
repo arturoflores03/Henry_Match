@@ -6,15 +6,16 @@ import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import BoltIcon from '@mui/icons-material/Bolt';
 import { IconButton } from '@mui/material';
+import { Grid } from '@mui/material';
 
 function ButtonSwipe() {
   return (
     <div className='buttonSwipe'>
-
+        <Grid item xl={12} spacing={3} >
         <IconButton className='buttonSwipe__replay'>
             <ReplayIcon font='large'/> 
         </IconButton>
-
+        </Grid>
         <IconButton className='buttonSwipe__close'>
             <CloseIcon font='large'/> 
         </IconButton>
@@ -30,7 +31,7 @@ function ButtonSwipe() {
         <IconButton className='buttonSwipe__bolt'>
             <BoltIcon font='large'/> 
         </IconButton>
-
+        
     </div>
   )
 }

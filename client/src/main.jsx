@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import OnBoarding from "./pages/OnBoarding";
 import "./index.css";
 import Dashboard from "./pages/Dashboard";
-/* import Card from  "./components/Card/Card"; */
+
 import HomeC from "./pages/HomeC";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/onboarding" element={<OnBoarding />} />
-        {/* <Route path="/card" element={<Card />} /> */}
+        
         <Route path="/homeC" element={<HomeC />} />
       </Routes>
     </BrowserRouter>

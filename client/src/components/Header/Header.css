@@ -1,0 +1,12 @@
+.header{
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+   padding: 20px;
+}
+.logo{
+    height: 60px;
+    object-fit: contain;
+    border-radius: 15em;
+   
+}

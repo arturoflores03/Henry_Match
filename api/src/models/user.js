@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema({
   },
   career: {
     type: String,
-    enum: ["fullstack", "datascience"],
+    enum: ["full-stack", "data-science"],
   },
   createdAt: {
     type: Date,

@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
   },
   henryLevel: {
     type: String,
-    enum: ["m1", "m2", "m3", "m4", "pi", "pf", "graduate"],
+    enum: ["m1", "m2", "m3", "m4", "m5", "m6", "pi", "pf", "graduate"],
   },
   likeRecieved: {
     type: [String],

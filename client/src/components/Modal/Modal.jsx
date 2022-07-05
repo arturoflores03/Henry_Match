@@ -13,6 +13,7 @@ import {
   getUserByNick,
   filterByGender,
   filterByMe,
+  getUsers,
 } from "../../Redux/actions/index";
 
 //======ESTILO E IMAGENES
@@ -71,6 +72,7 @@ const Modal = ({ modal, setModal }) => {
   function handleChangeName(e) {
     e.preventDefault();
     const { name, value } = e.target;
+    /* VALIDACIÓN PARA QUE EL NOMBRE SEA UNICO    
     const nameInDb = users.find((u) => u.name === value);
     if (nameInDb) {
       setErrors({ ...errors, name: "tu nombre debe ser único, como vos" });
@@ -79,23 +81,26 @@ const Modal = ({ modal, setModal }) => {
         ...userForm,
         [name]: value,
       });
-
       delete errors.name;
-    }
+    } */
+    setUserForm({
+      ...userForm,
+      [name]: value,
+    });
   }
   //OBTENGO  LA EDAD DEL USUARIO
   function handleChangeAge(e) {
     e.preventDefault();
     const { name, value } = e.target;
-    if (value<18) {
+    if (value < 18) {
       setErrors({ ...errors, age: "Tenes que ser mayor de edad" });
     } else {
-    setUserForm({
-      ...userForm,
-      [name]: Number(value),
-    })
-    delete errors.age;
-  };
+      setUserForm({
+        ...userForm,
+        [name]: Number(value),
+      });
+      delete errors.age;
+    }
   }
   //OBTENGO LOS DEMAS DATOS DEL USUARIO PARA CREAR EL USUARIO
   function handleChange(e) {
@@ -116,19 +121,18 @@ const Modal = ({ modal, setModal }) => {
       setErrors({ ...errors, msg: "todos los campos son requeridos" });
       setTimeout(() => {
         setErrors(
-          errors.name ?  {name: "tu nombre debe ser único, como vos"} :  errors.age ? { age: "Tenes que ser mayor de edad" }  : {}
-        )
+          /*  VALIDACION PARA QUE EL NOMBRE SEA UNICO
+            errors.name
+            ? { name: "tu nombre debe ser único, como vos" }
+            : */ errors.age ? { age: "Tenes que ser mayor de edad" } : {}
+        );
       }, 2000);
       return;
     }
     if (Object.keys(errors).length === 0) {
-      //PARA LLENAR userDetail
-     // dispatch(getUserByNick(userForm.nickname));
-      //PARA FILTRAR SEGUN genderInt
-      // dispatch(filterByGender(userForm.genderInt));
-      //AHORA SI CREO UN USUARIO NUEVO
       dispatch(createUser(userForm));
-      dispatch(filterByMe())
+      dispatch(getUsers());
+      dispatch(filterByMe());
       Swal.fire({
         position: "center",
         icon: "success",
@@ -170,7 +174,8 @@ const Modal = ({ modal, setModal }) => {
                 name="name"
                 placeholder="nombre..."
                 onChange={handleChangeName}></input>
-              {errors.name && <p>{errors.name}</p>}
+              {/*VALIDACIÓN PARA QUE EL NOMBRE SEA UNICO
+               {errors.name && <p>{errors.name}</p>} */}
             </div>
 
             {/* LA FECHA DE NACIMIENTO DEL USUARIO */}
@@ -180,7 +185,7 @@ const Modal = ({ modal, setModal }) => {
                 type="number"
                 name="age"
                 onChange={handleChangeAge}></input>
-                {errors.age && <p>{errors.age}</p>}
+              {errors.age && <p>{errors.age}</p>}
             </div>
 
             {/* EL GENERO DEL USUARIO */}
@@ -191,6 +196,7 @@ const Modal = ({ modal, setModal }) => {
                 <option value="female">mujer</option>
               </select>
             </div>
+
             {/* EL GENERO QUE LE INTERESA VER AL USUARIO */}
             <div>
               <InputLabel htmlFor="genderInt">
@@ -202,14 +208,12 @@ const Modal = ({ modal, setModal }) => {
                 <option value="female">mujeres</option>
               </select>
             </div>
-
             {errors.msg && <p>{errors.msg}</p>}
 
             <DialogActions>
               <button type="submit">LISTO, QUE TE DIVIERTAS!</button>
             </DialogActions>
           </form>
-
           <p>En tu perfil podras agregar fotos y más información sobre vos</p>
         </DialogContent>
       </Dialog>

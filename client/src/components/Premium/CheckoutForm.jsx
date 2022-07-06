@@ -12,6 +12,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 //======IMPORTACIONES DE COMPONENTES
+/* id":1155403343,"nickname":"TETE8379563","password":"qatest3588","site_status":"active","site_id":"MLA","description":"a description","date_created":"2022-07-05T21:21:17-04:00","date_last_updated":"2022-07-05T21:21:17-04:00"} */
 
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
 //======ESTILO E IMAGENES
@@ -112,7 +113,7 @@ const Form = () => {
         </h4>
         <h2>SUSCRIPCION MENSUAL</h2>
         <p>US$ 200</p>
-        <form className="checkoutform" onSubmit={handleSubmit}>
+        <form className="checkoutform" onSubmit={(e) => handleSubmit(e)}>
           <p>Ingresá tus credenciales {userDetail.name}</p>
           <CardElement className="checkoutform-input" />
           <p>
@@ -123,8 +124,6 @@ const Form = () => {
             <small>Quiero modificar mi correo</small>
           </NavLink>
           <div>
-            {/*             <Button sx={{ p: 1, m: 1 }}>SUSCRIBIRME</Button>
-             */}{" "}
             <button>SUSCRIBIRME</button>
           </div>
         </form>

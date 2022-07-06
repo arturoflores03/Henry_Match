@@ -120,7 +120,13 @@ export default function BottomBar({ premium, setPremium }) {
               aria-label="add"
               sx={{ width: 60, height: 60 }}
               onClick={handleOpen}>
-              <DiamondIcon fontSize="large" />
+              <DiamondIcon
+                sx={{
+                  color: "dark.main",
+                  "&:hover": { color: "primary.main" },
+                }}
+                fontSize="large"
+              />
             </StyledFab>
           </Tooltip>
           <Box sx={{ flexGrow: 1 }} />

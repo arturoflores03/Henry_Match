@@ -39,6 +39,7 @@ import CakeIcon from "@mui/icons-material/Cake";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import WorkIcon from "@mui/icons-material/Work";
 import { AttachFileIcon } from "@mui/icons-material/AttachFile";
 

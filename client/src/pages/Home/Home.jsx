@@ -52,8 +52,10 @@ const Home = () => {
 
   const users = useSelector((state) => state.users);
   const userDetail = useSelector((state) => state.userDetail);
-
+  //MODAL PARA CREAR USUARIO
   const [modal, setModal] = useState(false);
+  //MODAL PREMIUM
+  const [premium, setPremium] = useState(false);
 
   //PARA LLENAR EL STORE CON TODOS LOS USUARIOS
   useEffect(() => {
@@ -128,8 +130,8 @@ const Home = () => {
         <Grid>
           <CssBaseline />
           <Header />
-          <Cards />
-          <BottomBar />
+          <Cards premium={premium} setPremium={setPremium} />
+          <BottomBar premium={premium} setPremium={setPremium} />
         </Grid>
       ) : (
         <>

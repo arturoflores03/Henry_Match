@@ -20,7 +20,7 @@ export const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/desktop" element={<Desktop />} />
         <Route path="/chatroom" element={<ChatRoom />} />
-        <Route path="/stripe" element={<CheckoutForm />} />
+        <Route path="/subscription" element={<CheckoutForm />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,43 +1,48 @@
-import React, { useState, useMemo, useRef, useLayoutEffect} from "react";
-import TinderCard from "react-tinder-card";
-import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+//======PAQUETES Y LIBRERIAS
+import React, { useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import CakeIcon from "@mui/icons-material/Cake";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import WorkIcon from "@mui/icons-material/Work";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import InterestsIcon from "@mui/icons-material/Interests";
-import Swal from "sweetalert2";
-
-import { Box, Divider } from "@mui/material";
-
+import { useEffect } from "react";
+import TinderCard from "react-tinder-card";
+//======IMPORTACIONES DE COMPONENTES
+//======IMPORTACIONES DE FUNCIONES NUESTRAS
 import {
+  getUsers,
   filterByGender,
   filterByMe,
   getUserByNick,
   updateMatches,
 } from "../../Redux/actions";
-import { useEffect } from "react";
-import { getUsers } from "./../../Redux/actions/index";
 
+//======ESTILO E IMAGENES
+import { styled } from "@mui/material/styles";
+import {
+  Tooltip,
+  CardHeader,
+  Card,
+  Collapse,
+  CardContent,
+  CardActions,
+  autocompleteClasses,
+  Box,
+  Divider,
+  CardMedia,
+  Typography,
+  Avatar,
+  IconButton,
+} from "@mui/material";
+
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import InterestsIcon from "@mui/icons-material/Interests";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CakeIcon from "@mui/icons-material/Cake";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import WorkIcon from "@mui/icons-material/Work";
+import { AttachFileIcon } from "@mui/icons-material/AttachFile";
+
+import Swal from "sweetalert2";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -50,14 +55,12 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function Cards() {
+export default function Cards({ premium, setPremium }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  //*******//
 
   const db = useSelector((state) => state.usersSelected);
 
@@ -83,55 +86,55 @@ export default function Cards() {
   const [lastDirection, setLastDirection] = useState();
   const currentIndexRef = useRef(currentIndex);
 
-    //infinito
-    /*  useEffect(()=>{
+  //infinito
+  /*  useEffect(()=>{
     dispatch(filterByMe())
     console.log('ahora me estoy montando')
     }) */
-  
-    //convierte al userDetail en null
-    /* useEffect(()=>{
+
+  //convierte al userDetail en null
+  /* useEffect(()=>{
       dispatch(filterByMe())
       console.log('ahora me estoy montando')
       },[currentUser]) */
 
-    //FILTERBYME EN EL EFFECT TE DEVUELVE  USERDETAIL NULL!!!!!!!!
+  //FILTERBYME EN EL EFFECT TE DEVUELVE  USERDETAIL NULL!!!!!!!!
 
-     /*  useEffect(()=>{
+  /*  useEffect(()=>{
         dispatch(filterByMe())
         console.log('ahora me estoy montando')
         },[]) */
 
-   /*  useLayoutEffect(()=>{
+  /*  useLayoutEffect(()=>{
       dispatch(filterByMe())
       dispatch(getUsers())
       },[]) */
 
-      //userDetail en NULL 
-     /*  useEffect(()=>{
+  //userDetail en NULL
+  /*  useEffect(()=>{
       dispatch(getUserByNick(currentUser.nickname));
       dispatch(getUsers())
       dispatch(filterByMe())
         console.log('ahora me estoy montando')
       },[updateMatches]) 
  */
-      //userDetail en NULL 
-      /* useEffect(()=>{
+  //userDetail en NULL
+  /* useEffect(()=>{
         dispatch(getUsers())
         dispatch(getUserByNick(currentUser.nickname));
-           console.log('ahora me estoy montando')
+          console.log('ahora me estoy montando')
         },[updateMatches]) 
  */
-       /*  useEffect(()=>{
+  /*  useEffect(()=>{
           dispatch(getUsers())
                       console.log('ahora me estoy montando')
           },[updateMatches])  */
-          //atrasado 2 pasos
-       /*    useEffect(()=>{
+  //atrasado 2 pasos
+  /*    useEffect(()=>{
             dispatch(getUsers())
             },[])  */
 
-         /*    useEffect(()=>{
+  /*    useEffect(()=>{
               return () => dispatch(clearUserDetail())
               },[dispatch])   */
 
@@ -241,7 +244,10 @@ export default function Cards() {
   };
 
   const goBack = async () => {
-    if (!canGoBack) return;
+    if (!canGoBack) {
+      setPremium(true);
+      return;
+    }
     const newIndex = currentIndex + 1;
     updateCurrentIndex(newIndex);
     await childRefs[newIndex].current.restoreCard();
@@ -255,29 +261,29 @@ export default function Cards() {
           justifyContent="center"
           alignItems="center"
           sx={{
-            marginTop: 15,
+            marginTop: 10,
             position: "absolute",
             right: 0,
             left: 0,
             boxShadow: 3,
             border: 0,
-          }}
-        >
+          }}>
           <TinderCard
             ref={childRefs[index]}
             className="swipe"
             preventSwipe={["up", "down"]}
             key={character.id}
             onSwipe={(dir) => swiped(dir, character.name, index, character._id)}
-            onCardLeftScreen={() => outOfFrame(character.name, index)}
-          >
+            onCardLeftScreen={() => outOfFrame(character.name, index)}>
             <Card
               sx={{
-                width: 375,
+                width: 330,
+                height: 460,
+                mt: 0,
                 marginBottom: 14,
                 borderColor: "none",
-              }}
-            >
+                borderRadius: 3,
+              }}>
               <CardMedia
                 component="img"
                 height="566"
@@ -292,8 +298,7 @@ export default function Cards() {
                     fontWeight: 900,
                     // letterSpacing: 1,
                     fontFamily: "Proxima Nova",
-                  }}
-                >
+                  }}>
                   {character.name}{" "}
                   <Typography
                     sx={{
@@ -302,8 +307,7 @@ export default function Cards() {
                       fontSize: 20,
                       letterSpacing: 2,
                       fontFamily: "Proxima Nova",
-                    }}
-                  >
+                    }}>
                     {character.age}
                   </Typography>
                 </Typography>
@@ -311,8 +315,7 @@ export default function Cards() {
                   expand={expanded}
                   onClick={handleExpandClick}
                   aria-expanded={expanded}
-                  aria-label="show more"
-                >
+                  aria-label="show more">
                   <ExpandMoreIcon color="light" />
                 </ExpandMore>
               </CardActions>
@@ -323,8 +326,7 @@ export default function Cards() {
                 unmountOnExit
                 sx={{
                   marginTop: -3,
-                }}
-              >
+                }}>
                 <CardContent>
                   <Box
                     display="flex"
@@ -334,8 +336,7 @@ export default function Cards() {
                       right: 0,
                       left: 0,
                       marginTop: 1,
-                    }}
-                  >
+                    }}>
                     <Typography>
                       <LocationOnIcon /> {character.city}
                     </Typography>
@@ -359,16 +360,14 @@ export default function Cards() {
                       right: 0,
                       left: 0,
                       marginTop: 1,
-                    }}
-                  >
+                    }}>
                     <Typography
                       textTransform="uppercase"
                       sx={{
                         display: "inline",
                         letterSpacing: 2,
                         fontFamily: "Proxima Nova",
-                      }}
-                    >
+                      }}>
                       <WorkIcon /> {character.job}
                     </Typography>
                     <Typography
@@ -377,8 +376,7 @@ export default function Cards() {
                         display: "inline",
                         letterSpacing: 2,
                         fontFamily: "Proxima Nova",
-                      }}
-                    >
+                      }}>
                       <AttachFileIcon /> {character.henryLevel}
                     </Typography>
                     <InterestsIcon />{" "}
@@ -398,36 +396,46 @@ export default function Cards() {
         alignItems="center"
         sx={{
           position: "absolute",
-          // display: "block",
-          top: 70,
+          top: 15,
           right: 0,
           left: 0,
-        }}
-      >
-        <IconButton
-          style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-          onClick={() => swipe("left")}
-          color="light"
-          size="large"
-        >
-          <CloseIcon font="large" />
-        </IconButton>
-        <IconButton
-          style={{ backgroundColor: !canGoBack }}
-          onClick={() => goBack()}
-          color="light"
-          size="large"
-        >
-          <ArrowBackIcon font="large" />
-        </IconButton>
-        <IconButton
-          style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-          onClick={() => swipe("right")}
-          color="light"
-          size="large"
-        >
-          <FavoriteIcon font="large" />
-        </IconButton>
+        }}>
+        <Box
+          display="flex"
+          justifyContent="space-around"
+          alignItems="center"
+          sx={{
+            position: "absolute",
+            top: 80,
+            mx: "auto",
+            width: 300,
+          }}>
+          <IconButton
+            style={{
+              backgroundColor: !canSwipe && "#83838077",
+            }}
+            onClick={() => swipe("left")}
+            color="warning"
+            size="large">
+            <CloseIcon font="large" />
+          </IconButton>
+          <IconButton
+            style={{ backgroundColor: !canGoBack }}
+            onClick={() => goBack()}
+            color="primary"
+            size="large">
+            <Tooltip title="go back">
+              <ArrowBackIcon font="large" />
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            style={{ backgroundColor: !canSwipe && "#83838077" }}
+            onClick={() => swipe("right")}
+            color="info"
+            size="large">
+            <FavoriteIcon font="large" />
+          </IconButton>
+        </Box>
       </Box>
       {lastDirection ? (
         <Typography variant="h5" key={lastDirection}>

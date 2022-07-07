@@ -18,11 +18,8 @@ const LogoutButton = () => {
       size="medium"
       variant="contained"
       sx={{ mt: 3, mb: 2 }}
-<<<<<<< HEAD
       onClick={handleClearDetail}>
-=======
-      onClick={() => handleClearDetail()}>
->>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
+      {/* onClick={() => handleClearDetail()}> */}
       CERRAR SESION
     </Button>
   );

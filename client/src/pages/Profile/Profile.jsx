@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
-
 //======IMPORTACIONES DE COMPONENTES
 import LogoutButton from "../../components/LogoutButton/LogoutButton";
 import LoginButton from "../../components/LoginButton/LoginButton";
@@ -24,9 +23,9 @@ import "./Profile.css";
 const Profile = () => {
   const userProfile = useSelector((state) => state.userDetail);
   const { user, isAuthenticated, isLoading } = useAuth0();
-  // ACTUALIZAR AL RENDERIZAR
+  // PARA ACTUALIZAR LO QUE SE RENDERIZA AL MODICAR UN DATO DEL FORMU
   const [update, setUpdate] = useState(false);
-  //RENDERIZAR EL FORM
+  // RENDERIZADO CONDICIONAL DEL FORM
   const [updateForm, setUpdateForm] = useState(false);
   const dispatch = useDispatch();
 
@@ -46,7 +45,7 @@ const Profile = () => {
     dispatch(updateUser(userProfile._id, { active: false }));
     /*   setUpdate(true);
       setUpdateForm(false) */
-    alert('Tu cuenta ha sido eliminada')
+    alert("Tu cuenta ha sido eliminada");
   }
 
   return (
@@ -77,8 +76,8 @@ const Profile = () => {
             </div>
 
             <div className="label">
-              {userProfile.image?/* .length >= 0 ? */ (
-                <img
+              {userProfile.image ? (
+                /* .length >= 0 ? */ <img
                   src={userProfile.image}
                   alt={userProfile.name}
                   className="imagenperfil"
@@ -131,7 +130,10 @@ const Profile = () => {
                   )}
                 </p>
               ) : (
-                <p className="alert"> Todavia no definiste tu genero de interes </p>
+                <p className="alert">
+                  {" "}
+                  Todavia no definiste tu genero de interes{" "}
+                </p>
               )}{" "}
             </div>
 
@@ -145,7 +147,13 @@ const Profile = () => {
 
             <div className="label">
               {userProfile.interests ? (
-                <p> Tus Intereses son: {userProfile.interests.map(i => <p>{i}</p>)} </p>
+                <p>
+                  {" "}
+                  Tus Intereses son:{" "}
+                  {userProfile.interests.map((i) => (
+                    <p>{i}</p>
+                  ))}{" "}
+                </p>
               ) : (
                 <p className="alert"> Ingresa tus intereses</p>
               )}
@@ -159,7 +167,7 @@ const Profile = () => {
               )}
             </div>
 
-           {/*  <h3> Tu Imagenes cargadas </h3>
+            {/*  <h3> Tu Imagenes cargadas </h3>
             <br />
             <ImageList
               sx={{ width: 500, height: 450 }}
@@ -178,21 +186,20 @@ const Profile = () => {
               ))}
             </ImageList> */}
 
-            <button className='eliminar' onClick={handleUserActive}>ELIMINAR CUENTA</button>
+            <button className="eliminar" onClick={handleUserActive}>
+              ELIMINAR CUENTA
+            </button>
 
             <LogoutButton />
           </div>
 
           <button onClick={handleClick}> Actualiza tus Datos </button>
 
-
-
           {updateForm && (
             <div className="datosacompletar">
               <Formu setUpdate={setUpdate} setUpdateForm={setUpdateForm} />
             </div>
           )}
-
         </div>
       ) : (
         <div>

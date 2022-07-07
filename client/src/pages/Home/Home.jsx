@@ -17,11 +17,10 @@ import BottomBar from "../../components/BottomBar";
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
 
 import { filterByMe, filterUserByMatches, getUsers } from "../../redux/actions";
-import { filterByGender } from "../../redux/actions";
 import { getUserByNick, clearUserDetail } from "../../redux/actions/index";
 
 //======ESTILO E IMAGENES
-import { Typography, Link, Box, Grid, Avatar, CardMedia } from "@mui/material";
+import { Typography, Link, Box, Grid } from "@mui/material";
 import HenryGirl from "../../assets/HenryGirl.jpg";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
@@ -49,30 +48,45 @@ function Copyright(props) {
 const Home = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const userMatch = useSelector(state => state.userMatch)
+  const userMatch = useSelector((state) => state.userMatch);
   const users = useSelector((state) => state.users);
   const userDetail = useSelector((state) => state.userDetail);
   //MODAL PARA CREAR USUARIO
   const [modal, setModal] = useState(false);
   //KEY PARA CERRAR EL MODAL DE CREACION DE USUARIO
   const [key, setKey] = useState(false);
+  //USER DE AUTH0 EN LOCAL STORAGE
+  const [localUser, setLocalUser] = useState(
+    localStorage.getItem("localUser")
+      ? JSON.parse(localStorage.getItem("localUser"))
+      : []
+  );
 
-  const modalStatus = "";
-
-  if (key === true) {
-    const modalStatus = "opened";
-  }
-
-  console.log(modalStatus);
-
-  //MODAL PREMIUM
+  //PARA ABRIR MODAL PREMIUM
   const [premium, setPremium] = useState(false);
 
-  //PARA LLENAR EL STORE CON TODOS LOS USUARIOS
+  //PARA LLENAR EL STORE
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getUserByNick(localUser.sub));
+    /*  userDetail.length > 0
+      ? dispatch(filterByMe())
+      : console.log("HOME: userDetail está vacío"); */
   }, []);
 
+  //PARA FILTRAR LO QUE RENDERIZA CARD CUANDO SE MODIFICA USERDETAIL
+  useEffect(() => {
+    /*  userDetail.length > 0
+      ? dispatch(filterByMe())
+      : console.log("HOME: userDetail está vacío 2"); */
+  }, [userDetail]);
+
+  //PARA GUARDAR USER DE AUTH0 EN LOCALSTORAGE
+  useEffect(() => {
+    localStorage.setItem("localUser", JSON.stringify(localUser) ?? []);
+  }, [localUser]);
+
+  //MENSAJES
   useEffect(() => {
     if (user) {
       const userid = {
@@ -88,12 +102,12 @@ const Home = () => {
     }
   }, [user]);
 
-  //PARA ABRIR MODAL SOLO CUANDO EL USUARIO NO ESTA EN LA DB
+  //PARA ABRIR MODAL DE CREACION DE USUARIO CUANDO NO ESTA EN LA DB
   useEffect(() => {
     if (isAuthenticated === true) {
       //ME GUARDO EL SUB (NUESTRO NICKNAME) DEL USUARIO DE AUTH0 EN ESTA VARIABLE
       const localUserNickname = user.sub;
-
+      console.log("localUser que contiene user Auth0", localUser.sub);
       //EN ESTA VARIABLE SER GUARDA EL LOCAL USER SI ESTA EN LA DB
       const userInDb = users.find((u) => u.nickname === localUserNickname);
 
@@ -109,24 +123,8 @@ const Home = () => {
     }
   }, [isAuthenticated]);
 
-  //PARA FILTRAR USUARIO POR GENERO
-  /*   useEffect(() => {
-    dispatch(filterByGender(userDetail?.genderInt));
-     }, [modal]); */
-
-  //PARA MONTAR CON LOS FILTROS GENERO,LIKES, DISLIKES APLICADOS
-  useEffect(() => {
-    dispatch(filterByMe());
-  }, [userDetail]);
-
-
   return (
     <>
-      {/* <ChatRoom
-        usersDetail={userDetail}
-        users={users}
-        /> */}
-
       {isLoading && (
         <>
           <Loader />

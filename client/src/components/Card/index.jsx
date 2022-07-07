@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 //======PAQUETES Y LIBRERIAS
 import React, { useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,47 +5,13 @@ import { useEffect } from "react";
 import TinderCard from "react-tinder-card";
 //======IMPORTACIONES DE COMPONENTES
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
-import {
-  getUsers,
-  filterByGender,
-=======
-import React, { useState, useMemo, useRef } from "react";
-import TinderCard from "react-tinder-card";
-import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useDispatch, useSelector } from "react-redux";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import CakeIcon from "@mui/icons-material/Cake";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import WorkIcon from "@mui/icons-material/Work";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import InterestsIcon from "@mui/icons-material/Interests";
-import Swal from "sweetalert2";
-
-import { Box, Divider, Slide } from "@mui/material";
-import { MsgContainer, MsgText } from "../Card/StyleMsg";
 
 import {
->>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
   filterByMe,
   getUserByNick,
   updateMatches,
+  getUsers,
+  filterByGender,
 } from "../../Redux/actions";
 
 //======ESTILO E IMAGENES
@@ -65,8 +30,13 @@ import {
   Typography,
   Avatar,
   IconButton,
+  Slide,
 } from "@mui/material";
 
+import { red } from "@mui/material/colors";
+import ShareIcon from "@mui/icons-material/Share";
+import InfoIcon from "@mui/icons-material/Info";
+import { MsgContainer, MsgText } from "../Card/StyleMsg";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import InterestsIcon from "@mui/icons-material/Interests";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -77,7 +47,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import WorkIcon from "@mui/icons-material/Work";
-import { AttachFileIcon } from "@mui/icons-material/AttachFile";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 import Swal from "sweetalert2";
 
@@ -92,59 +62,45 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-<<<<<<< HEAD
-export default function Cards({ premium, setPremium }) {
-=======
 const messages = [
   "",
   "Por el momento no hay más usuarios!",
   "Por favor regresa más tarde.",
 ];
 
-export default function Cards() {
->>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
+export default function Cards({ premium, setPremium }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-<<<<<<< HEAD
-=======
   // MENSAJE CUANDO NO HAY MAS CARTAS
   const containerRef = useRef();
   const [show, setShow] = useState(true);
-    const [messageIndex, setMessageIndex] = useState(0);
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-          // get next message
-          setMessageIndex((i) => (i + 1) % messages.length);
-        }, 1500);
+  const [messageIndex, setMessageIndex] = useState(0);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // get next message
+      setMessageIndex((i) => (i + 1) % messages.length);
+    }, 1500);
 
-        return () => {
-          clearInterval(intervalId);
-        };
-    }, []);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   //*******//
 
->>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
   const db = useSelector((state) => state.usersSelected);
 
   const currentUser = useSelector((state) => state.userDetail);
 
   const dispatch = useDispatch();
 
-  useEffect(
-    () => {
-      dispatch(getUsers());
-    },
-    [
-      /* currentUser, db  */
-      /* UpdateCardUser,  */
-      /* UpdateCurrentUser, */
-    ]
-  );
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
 
   const [currentIndex, setCurrentIndex] = React.useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
@@ -269,7 +225,7 @@ export default function Cards() {
           matches: miID,
         })
       );
-        Swal.fire({
+      Swal.fire({
         title: `hiciste match con ${name}`,
         text: "Felicidades!!",
         imageUrl: `${currentCard.image}`,
@@ -312,161 +268,160 @@ export default function Cards() {
 
   return (
     <>
-    {db.length ? (
-      db.map((character, index) => (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            marginTop: 10,
-            position: "absolute",
-            right: 0,
-            left: 0,
-            boxShadow: 3,
-            border: 0,
-          }}>
-          <TinderCard
-            ref={childRefs[index]}
-            className="swipe"
-            preventSwipe={["up", "down"]}
-            key={character.id}
-            onSwipe={(dir) => swiped(dir, character.name, index, character._id)}
-            onCardLeftScreen={() => outOfFrame(character.name, index)}>
-            <Card
-              sx={{
-                width: 330,
-                height: 460,
-                mt: 0,
-                marginBottom: 14,
-                borderColor: "none",
-                borderRadius: 3,
-              }}>
-              <CardMedia
-                component="img"
-                height="566"
-                style={{ backgroundImage: "url(" + character.image + ")" }}
-                alt=""
-                sx={{ borderColor: "#000" }}
-              />
-              <CardActions disableSpacing sx={{ bgcolor: "inherit" }}>
-                <Typography
-                  sx={{
-                    fontSize: 30,
-                    fontWeight: 900,
-                    // letterSpacing: 1,
-                    fontFamily: "Proxima Nova",
-                  }}>
-                  {character.name}{" "}
+      {db.length ? (
+        db.map((character, index) => (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              marginTop: 10,
+              position: "absolute",
+              right: 0,
+              left: 0,
+              boxShadow: 3,
+              border: 0,
+            }}>
+            <TinderCard
+              ref={childRefs[index]}
+              className="swipe"
+              preventSwipe={["up", "down"]}
+              key={character.id}
+              onSwipe={(dir) =>
+                swiped(dir, character.name, index, character._id)
+              }
+              onCardLeftScreen={() => outOfFrame(character.name, index)}>
+              <Card
+                sx={{
+                  width: 330,
+                  height: 460,
+                  mt: 0,
+                  marginBottom: 14,
+                  borderColor: "none",
+                  borderRadius: 3,
+                }}>
+                <CardMedia
+                  component="img"
+                  height="566"
+                  style={{ backgroundImage: "url(" + character.image + ")" }}
+                  alt=""
+                  sx={{ borderColor: "#000" }}
+                />
+                <CardActions disableSpacing sx={{ bgcolor: "inherit" }}>
                   <Typography
                     sx={{
-                      fontWeight: 300,
-                      display: "inline",
-                      fontSize: 20,
-                      letterSpacing: 2,
+                      fontSize: 30,
+                      fontWeight: 900,
+                      // letterSpacing: 1,
                       fontFamily: "Proxima Nova",
                     }}>
-                    {character.age}
+                    {character.name}{" "}
+                    <Typography
+                      sx={{
+                        fontWeight: 300,
+                        display: "inline",
+                        fontSize: 20,
+                        letterSpacing: 2,
+                        fontFamily: "Proxima Nova",
+                      }}>
+                      {character.age}
+                    </Typography>
                   </Typography>
-                </Typography>
-                <ExpandMore
-                  expand={expanded}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label="show more">
-                  <ExpandMoreIcon color="light" />
-                </ExpandMore>
-              </CardActions>
+                  <ExpandMore
+                    expand={expanded}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more">
+                    <ExpandMoreIcon color="light" />
+                  </ExpandMore>
+                </CardActions>
 
-              <Collapse
-                in={expanded}
-                timeout="auto"
-                unmountOnExit
-                sx={{
-                  marginTop: -3,
-                }}>
-                <CardContent>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    sx={{
-                      right: 0,
-                      left: 0,
-                      marginTop: 1,
-                    }}>
+                <Collapse
+                  in={expanded}
+                  timeout="auto"
+                  unmountOnExit
+                  sx={{
+                    marginTop: -3,
+                  }}>
+                  <CardContent>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      sx={{
+                        right: 0,
+                        left: 0,
+                        marginTop: 1,
+                      }}>
+                      <Typography>
+                        <LocationOnIcon /> {character.city}
+                      </Typography>
+                    </Box>
+                    <Typography sx={{ letterSpacing: 3, fontStyle: "oblique" }}>
+                      {character.description}
+                    </Typography>
+                    <Divider color="#ffff00" />
+                    <Typography textTransform="uppercase">
+                      <PersonOutlineIcon /> {character.gender}
+                    </Typography>
                     <Typography>
-                      <LocationOnIcon /> {character.city}
+                      <CakeIcon /> {character.birthday}
                     </Typography>
-                  </Box>
-                  <Typography sx={{ letterSpacing: 3, fontStyle: "oblique" }}>
-                    {character.description}
-                  </Typography>
-                  <Divider color="#ffff00" />
-                  <Typography textTransform="uppercase">
-                    <PersonOutlineIcon /> {character.gender}
-                  </Typography>
-                  <Typography>
-                    <CakeIcon /> {character.birthday}
-                  </Typography>
-                  <Divider color="#ffff00" />
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    sx={{
-                      right: 0,
-                      left: 0,
-                      marginTop: 1,
-                    }}>
-                    <Typography
-                      textTransform="uppercase"
+                    <Divider color="#ffff00" />
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
                       sx={{
-                        display: "inline",
-                        letterSpacing: 2,
-                        fontFamily: "Proxima Nova",
+                        right: 0,
+                        left: 0,
+                        marginTop: 1,
                       }}>
-                      <WorkIcon /> {character.job}
-                    </Typography>
-                    <Typography
-                      textTransform="uppercase"
-                      sx={{
-                        display: "inline",
-                        letterSpacing: 2,
-                        fontFamily: "Proxima Nova",
-                      }}>
-                      <AttachFileIcon /> {character.henryLevel}
-                    </Typography>
-                    <InterestsIcon />{" "}
-                    {character.interests?.map((i) => {
-                      return <div key={i}>{i}</div>;
-                    })}
-                  </Box>
-                </CardContent>
-              </Collapse>
-            </Card>
-          </TinderCard>
-        </Box>
-      ))
-    ) :(
-         <MsgContainer ref={containerRef} overflow="hidden">
-            <Slide
-              direction={"right"}
-              in={show}
-              container={containerRef.current}
-              timeout={{
-                enter: 600,
-                exit: 100,
-              }}
-            >
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <MsgText>
-                  {messages[messageIndex]}
-                </MsgText>
-              </Box>
-            </Slide>
+                      <Typography
+                        textTransform="uppercase"
+                        sx={{
+                          display: "inline",
+                          letterSpacing: 2,
+                          fontFamily: "Proxima Nova",
+                        }}>
+                        <WorkIcon /> {character.job}
+                      </Typography>
+                      <Typography
+                        textTransform="uppercase"
+                        sx={{
+                          display: "inline",
+                          letterSpacing: 2,
+                          fontFamily: "Proxima Nova",
+                        }}>
+                        <AttachFileIcon /> {character.henryLevel}
+                      </Typography>
+                      <InterestsIcon />{" "}
+                      {character.interests?.map((i) => {
+                        return <div key={i}>{i}</div>;
+                      })}
+                    </Box>
+                  </CardContent>
+                </Collapse>
+              </Card>
+            </TinderCard>
+          </Box>
+        ))
+      ) : (
+        <MsgContainer ref={containerRef} overflow="hidden">
+          <Slide
+            direction={"right"}
+            in={show}
+            container={containerRef.current}
+            timeout={{
+              enter: 600,
+              exit: 100,
+            }}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <MsgText>{messages[messageIndex]}</MsgText>
+            </Box>
+          </Slide>
         </MsgContainer>
-    ) }
+      )}
       <Box
         display="flex"
         justifyContent="center"
@@ -514,7 +469,6 @@ export default function Cards() {
           </IconButton>
         </Box>
       </Box>
-   
     </>
   );
 }

@@ -40,7 +40,7 @@ const initialForm = {
   likeRecieved: [],
 };
 
-const Modal = ({ modal, setModal }) => {
+const Modal = ({ modal, setModal, setKey }) => {
   //ESTOS ESTADOS VIENEN DE MUI Y SE PASAN COMO PROPS A Dialog.
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState("sm");
@@ -142,6 +142,7 @@ const Modal = ({ modal, setModal }) => {
       });
       //SETEO EL FORMULARIO AL ESTADO ORIGINAL
       setUserForm(initialForm);
+      setKey(true);
       //CIERRO MODAL
       handleClose();
     }

@@ -54,6 +54,17 @@ const Home = () => {
   const userDetail = useSelector((state) => state.userDetail);
   //MODAL PARA CREAR USUARIO
   const [modal, setModal] = useState(false);
+  //KEY PARA CERRAR EL MODAL DE CREACION DE USUARIO
+  const [key, setKey] = useState(false);
+
+  const modalStatus = "";
+
+  if (key === true) {
+    const modalStatus = "opened";
+  }
+
+  console.log(modalStatus);
+
   //MODAL PREMIUM
   const [premium, setPremium] = useState(false);
 
@@ -125,7 +136,7 @@ const Home = () => {
         </>
       )}
 
-      <Modal modal={modal} setModal={setModal}></Modal>
+      <Modal modal={modal} setModal={setModal} setKey={setKey}></Modal>
       {isAuthenticated ? (
         <Grid>
           <CssBaseline />

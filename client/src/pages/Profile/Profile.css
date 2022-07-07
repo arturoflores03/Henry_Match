@@ -85,3 +85,21 @@ body {
     font-size: 30px;
     color: #0085FF;
 }
+
+.eliminar{
+    background: red;
+    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    border: none;
+    cursor: pointer;
+    width: 28%;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 15px;
+    transition: .3s ease all;
+    margin-bottom: 10px;
+    margin-left: 150px;
+
+
+}

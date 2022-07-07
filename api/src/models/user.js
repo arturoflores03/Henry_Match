@@ -15,60 +15,60 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         index: true,
-        unique: true 
+        unique: true
     },
     email: {
-        type: String,       
-        
+        type: String,
+
     },
-    
+
     premium: {
         type: Boolean,
-        default: false        
+        default: false
     },
     active: {
         type: Boolean,
-        default: true,        
+        default: true,
     },
     image: {
-        type: String,        
+        type: String,
     },
     gender: {
         type: String,
     },
     genderInt: {
         type: String,
-        enum: ['male','female','both']
+        enum: ['male', 'female', 'both']
     },
     description: {
         type: String,
     },
     henryLevel: {
         type: String,
-        enum: ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'pi','pf','graduate']
+        enum: ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'pi', 'pf', 'graduate']
     },
-    likeReceived:{
+    likeReceived: {
         type: [String]
     },
-    likeGiven:{
+    likeGiven: {
         type: [String]
     },
-    dislike:{
+    dislike: {
         type: [String]
     },
     matches: {
         type: [String],
     },
-     city: {
-    type: String,
+    city: {
+        type: String,
     },
 
     job: {
-    type: String,
+        type: String,
     },
     career: {
-    type: String,
-    enum: ["fullstack", "datascience"],
+        type: String,
+        enum: ["fullstack", "datascience"],
     },
     createdAt: {
         type: Date,
@@ -80,7 +80,6 @@ const userSchema = new mongoose.Schema({
     },
     interests: {
         type: [String],
-        enum: ["moda", "artes marciales", "fiestas", "videojuegos", "deportes", "cine", "viajes", "lectura", "programar"],
     },
 
 });

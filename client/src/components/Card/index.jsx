@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //======PAQUETES Y LIBRERIAS
 import React, { useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +9,41 @@ import TinderCard from "react-tinder-card";
 import {
   getUsers,
   filterByGender,
+=======
+import React, { useState, useMemo, useRef } from "react";
+import TinderCard from "react-tinder-card";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useDispatch, useSelector } from "react-redux";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CakeIcon from "@mui/icons-material/Cake";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import InfoIcon from "@mui/icons-material/Info";
+import CloseIcon from "@mui/icons-material/Close";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import WorkIcon from "@mui/icons-material/Work";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import InterestsIcon from "@mui/icons-material/Interests";
+import Swal from "sweetalert2";
+
+import { Box, Divider, Slide } from "@mui/material";
+import { MsgContainer, MsgText } from "../Card/StyleMsg";
+
+import {
+>>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
   filterByMe,
   getUserByNick,
   updateMatches,
@@ -56,19 +92,46 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+<<<<<<< HEAD
 export default function Cards({ premium, setPremium }) {
+=======
+const messages = [
+  "",
+  "Por el momento no hay más usuarios!",
+  "Por favor regresa más tarde.",
+];
+
+export default function Cards() {
+>>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+<<<<<<< HEAD
+=======
+  // MENSAJE CUANDO NO HAY MAS CARTAS
+  const containerRef = useRef();
+  const [show, setShow] = useState(true);
+    const [messageIndex, setMessageIndex] = useState(0);
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+          // get next message
+          setMessageIndex((i) => (i + 1) % messages.length);
+        }, 1500);
+
+        return () => {
+          clearInterval(intervalId);
+        };
+    }, []);
+
+  //*******//
+
+>>>>>>> 308c0446f192689b7fe28f5b70dff38ddd7363d3
   const db = useSelector((state) => state.usersSelected);
 
   const currentUser = useSelector((state) => state.userDetail);
-
-  const [UpdateCurrentUser, setUpdateCurrentUser] = useState({});
-  const [UpdateCardUser, setUpdateCardUser] = useState({});
 
   const dispatch = useDispatch();
 
@@ -195,6 +258,7 @@ export default function Cards({ premium, setPremium }) {
       );
 
       dispatch(getUserByNick(currentUser?.nickname));
+      dispatch(filterByMe());
     }
 
     const foundMatch = currentCard.likeGiven?.includes(miID);
@@ -205,15 +269,7 @@ export default function Cards({ premium, setPremium }) {
           matches: miID,
         })
       );
-      //  alert(`hiciste match con ${name}`)
-      // Swal.fire({
-      //   position: "center",
-      //   icon: "success",
-      //   title: `hiciste match con ${name}`,
-      //   showConfirmButton: false,
-      //   timer: 2500,
-      // });
-      Swal.fire({
+        Swal.fire({
         title: `hiciste match con ${name}`,
         text: "Felicidades!!",
         imageUrl: `${currentCard.image}`,
@@ -256,7 +312,8 @@ export default function Cards({ premium, setPremium }) {
 
   return (
     <>
-      {db.map((character, index) => (
+    {db.length ? (
+      db.map((character, index) => (
         <Box
           display="flex"
           justifyContent="center"
@@ -390,7 +447,26 @@ export default function Cards({ premium, setPremium }) {
             </Card>
           </TinderCard>
         </Box>
-      ))}
+      ))
+    ) :(
+         <MsgContainer ref={containerRef} overflow="hidden">
+            <Slide
+              direction={"right"}
+              in={show}
+              container={containerRef.current}
+              timeout={{
+                enter: 600,
+                exit: 100,
+              }}
+            >
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <MsgText>
+                  {messages[messageIndex]}
+                </MsgText>
+              </Box>
+            </Slide>
+        </MsgContainer>
+    ) }
       <Box
         display="flex"
         justifyContent="center"
@@ -438,15 +514,7 @@ export default function Cards({ premium, setPremium }) {
           </IconButton>
         </Box>
       </Box>
-      {lastDirection ? (
-        <Typography variant="h5" key={lastDirection}>
-          You swiped {lastDirection}
-        </Typography>
-      ) : (
-        <Typography variant="h5">
-          Swipe a card or press a button to get Restore Card button visible!
-        </Typography>
-      )}
+   
     </>
   );
 }

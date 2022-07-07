@@ -4,9 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 //======IMPORTACIONES DE COMPONENTES
-
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
-
 //======ESTILO E IMAGENES
 import {
   IconButton,
@@ -24,28 +22,21 @@ import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import SideBar from "../SideBar";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-
 const Header = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
   const userDetail = useSelector((state) => state.userDetail);
-
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -61,7 +52,8 @@ const Header = () => {
         horizontal: "right",
       }}
       open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}>
+      onClose={handleMobileMenuClose}
+    >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
@@ -74,7 +66,8 @@ const Header = () => {
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
-          color="inherit">
+          color="inherit"
+        >
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
           </Badge>
@@ -83,7 +76,6 @@ const Header = () => {
       </MenuItem>
     </Menu>
   );
-
   return (
     <>
       {isLoading && <Loader></Loader>}
@@ -116,7 +108,8 @@ const Header = () => {
                 <Tooltip title="Nuevos matches">
                   <IconButton
                     size="large"
-                    aria-label="show 17 new notifications">
+                    aria-label="show 17 new notifications"
+                  >
                     <Badge badgeContent={17} color="error">
                       <NotificationsIcon sx={{ color: "primary.light" }} />
                     </Badge>
@@ -128,8 +121,8 @@ const Header = () => {
                 <Tooltip title={`${user.name.substring(0, 1)} perfil`}>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      src={userDetail.picture}
-                      alt={user.name.substring(0, 1)}
+                      src={userDetail?.picture}
+                      alt={user.name?.substring(0, 1)}
                     />
                   </IconButton>
                 </Tooltip>
@@ -147,23 +140,35 @@ const Header = () => {
                     horizontal: "right",
                   }}
                   open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}>
+                  onClose={handleCloseUserMenu}
+                >
                   {/* MENU: MY PROFILE  */}
                   <MenuItem key={"profile"} onClick={handleCloseUserMenu}>
                     <NavLink to={"/profile"}>
                       <Typography
                         textAlign="center"
-                        sx={{ textDecoration: "none", color: "light.main" }}>
+                        sx={{ textDecoration: "none", color: "light.main" }}
+                      >
                         Mi Perfil
+                      </Typography>
+                    </NavLink>
+                    {/* MENU: LOGOUT  */}
+                  </MenuItem>
+                  <MenuItem key={"profile"} onClick={handleCloseUserMenu}>
+                    <NavLink to={"/admin"}>
+                      <Typography
+                        textAlign="center"
+                        sx={{ textDecoration: "none", color: "light.main" }}
+                      >
+                        Administrador
                       </Typography>
                     </NavLink>
                     {/* MENU: LOGOUT  */}
                   </MenuItem>
                   <MenuItem
                     key={"logout"}
-                    onClick={() =>
-                      logout({ returnTo: window.location.origin })
-                    }>
+                    onClick={() => logout({ returnTo: window.location.origin })}
+                  >
                     <Typography textAlign="center">Cerrar Sesión</Typography>
                   </MenuItem>
                 </Menu>
@@ -176,5 +181,4 @@ const Header = () => {
     </>
   );
 };
-
 export default Header;

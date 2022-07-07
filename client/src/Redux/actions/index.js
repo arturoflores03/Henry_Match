@@ -9,6 +9,7 @@ import {
   FILTERS_BY_ME,
   UPDATE_IMG,
   FILTER_USERS_BY_MATCHES,
+  RENDER_ADMIN,
   /*  GET_USER_BY_GENDERINT, */
   // FILTER_BY_PREFERENCE,
   // FILTER_BY_INTEREST,
@@ -73,7 +74,7 @@ export function updateUser(id, data) {
         `https://henrymatch-pg.herokuapp.com/usersID/${id}`,
         data
       );
-
+     
       return dispatch({
         type: UPDATE_USER,
         payload: user.data,
@@ -119,7 +120,6 @@ export function updateMatches(id, data) {
   };
 }
 
-
 export function filterUserByMatches(matches) {
   return {
     type: FILTER_USERS_BY_MATCHES,
@@ -141,7 +141,6 @@ export function filterUserByMatches(matches) {
   };
 } */
 
-
 //----ACTION CREATORS---//EL RESTO DE LAS FUNCIONES VAN AQUI:
 
 export function filterByGender(gender) {
@@ -150,7 +149,6 @@ export function filterByGender(gender) {
     payload: gender,
   };
 }
-
 
 export function filterByMe(payload) {
   return {
@@ -162,6 +160,13 @@ export function filterByMe(payload) {
 export function clearUserDetail(payload) {
   return {
     type: CLEAR_USER_DETAIL,
+    payload: payload,
+  };
+}
+
+export function renderAdmin(payload) {
+  return {
+    type: RENDER_ADMIN,
     payload: payload,
   };
 }

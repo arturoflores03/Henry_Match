@@ -9,6 +9,7 @@ import {
   FILTERS_BY_ME,
   UPDATE_IMG,
   FILTER_USERS_BY_MATCHES,
+  RENDER_ADMIN,
   /*  GET_USER_BY_GENDER,
   GET_USER_BY_GENDERINT, */
 } from "../actions/types.js";
@@ -18,12 +19,12 @@ const initialState = {
   usersBackup: [], //ESTE LO USO PARA EMPEZAR FILTERS & SORTERS
   usersSelected: [], //ESTE LO USO PARA ALMACENAR EL RESULTADO DE FILTERS & SORTERS
   userDetail: [], //USADO TAMBIEN PARA CLEAR_USER_DETAIL
-  userMatches:[],
+  userMatches: [],
   // OPCIONALES?
   // message: [], //POR EJ:AQUI  GUARDE LA RESPUESTA DEL SERVIDOR DESPUES DEL POST Y EL PUT
   gender: [],
   genderInt: [],
-  
+  admin: "users",
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -59,20 +60,21 @@ export default function rootReducer(state = initialState, action) {
       };
     }
     case UPDATE_MATCH: {
-      return { 
-        ...state, message: action.payload };
+      return {
+        ...state,
+        message: action.payload,
+      };
     }
 
     case FILTERS_BY_ME: {
-      
       const allMyUsers = state.usersBackup;
       const myID = state.userDetail?._id;
-      const myGenderInt = state.userDetail?.genderInt
+      const myGenderInt = state.userDetail?.genderInt;
 
       //FILTROS ANIDADOS
-      
+
       const filterByGender =
-       myGenderInt === "male"
+        myGenderInt === "male"
           ? allMyUsers.filter((e) => e.gender === "male")
           : myGenderInt === "female"
           ? allMyUsers.filter((e) => e.gender === "female")
@@ -80,30 +82,38 @@ export default function rootReducer(state = initialState, action) {
 
       const filterAddLikeReceived = filterByGender.filter(
         (e) => !e.likeReceived.includes(myID)
-      )
+      );
       const filterAddDisLikeReceived = filterAddLikeReceived.filter(
         (e) => !e.dislikeReceived.includes(myID)
-      )
-      const hiddenUser = filterAddDisLikeReceived.filter((e) => e._id !== myID)
-      const FinalFiltered = new Set(hiddenUser)
-      
-      const finalArrayFiltered = [...FinalFiltered]
-   
-      console.log("finalArrayFilt ",finalArrayFiltered);
+      );
+      const hiddenUser = filterAddDisLikeReceived.filter((e) => e._id !== myID);
+      const FinalFiltered = new Set(hiddenUser);
 
-      return { 
-        ...state, 
-        usersSelected: finalArrayFiltered };
+      const finalArrayFiltered = [...FinalFiltered];
+
+      console.log("finalArrayFilt ", finalArrayFiltered);
+
+      return {
+        ...state,
+        usersSelected: finalArrayFiltered,
+      };
     }
 
     case CLEAR_USER_DETAIL: {
-      return { 
-        ...state, 
-        userDetail: []
-       };
+      return {
+        ...state,
+        userDetail: [],
+      };
     }
 
-   /*  case FILTER_USERS_BY_GENDER: {
+    case RENDER_ADMIN: {
+      return {
+        ...state,
+        admin: action.payload,
+      };
+    }
+
+    /*  case FILTER_USERS_BY_GENDER: {
       const allusersGender = state.usersBackup;
       const usersFilterByGender =
         action.payload === "male"
@@ -114,18 +124,18 @@ export default function rootReducer(state = initialState, action) {
       return { ...state, usersSelected: usersFilterByGender };
     } */
 
-    case FILTER_USERS_BY_MATCHES:{
+    case FILTER_USERS_BY_MATCHES: {
       const allUsersMatches = state.usersBackup;
-      const allMatches = allUsersMatches.filter(e => e.matches.includes(action.payload))
-      console.log(allMatches,"reducerMatch")
-      return{
+      const allMatches = allUsersMatches.filter((e) =>
+        e.matches.includes(action.payload)
+      );
+      return {
         ...state,
-        userMatches: allMatches
-      }
+        userMatches: allMatches,
+      };
     }
 
     default:
       return state;
   }
 }
-

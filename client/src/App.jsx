@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 //======IMPORTACIONES DE COMPONENTES
 import CheckoutForm from "./components/Premium/CheckoutForm";
+import Admin from "./pages/Admin";
 import ChatRoom from "./pages/ChatRoom/ChatRoom";
 import Desktop from "./pages/Desktop/Desktop";
 import Home from "./pages/Home/Home";
@@ -21,6 +22,8 @@ export const App = () => {
         <Route path="/desktop" element={<Desktop />} />
         <Route path="/chatroom" element={<ChatRoom />} />
         <Route path="/subscription" element={<CheckoutForm />} />
+        <Route path="/stripe" element={<CheckoutForm />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );

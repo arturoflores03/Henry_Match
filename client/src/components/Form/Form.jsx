@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Formik, Form, ErrorMessage, Field } from "formik"; // es un componente con el que encerramos el formulario
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { updateImg, updateUser } from "../../Redux/actions";
+import { /* updateImg, */ updateUser } from "../../Redux/actions";
 import { useRef } from "react";
 import "./Form.css";
 
@@ -10,10 +9,21 @@ import "./Form.css";
 // renderer prop: renderizamos el formulario dentro de una funcion y por ahi le vamos a pasar props(valores) de Formik
 // Como es una funcion le puedo poner props e ingreso poniendo props.handleSubmit o sino {}
 
-const Formu = ({ setUpdate }) => {
+const interests = ["moda", "artes marciales", "fiestas", "videojuegos", "deportes", "cine", "viajes", "lectura", "programar"]
+
+const Formu = ({ setUpdate, setUpdateForm }) => {
   const dispatch = useDispatch();
   const userDetail = useSelector((state) => state.userDetail);
   const [image, setImage] = useState("");
+  const [input, setInput] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    genderInt: "",
+    henryLevel: "",
+    description: "",
+    interests: []
+  });
 
   const fileInput = useRef();
 
@@ -25,17 +35,83 @@ const Formu = ({ setUpdate }) => {
       .post("https://api.cloudinary.com/v1_1/henrymatch/image/upload", formData)
       .then((res) => {
         const urlImage = res.data.url;
-        dispatch(updateImg(userDetail._id, { image: urlImage }));
+        dispatch(updateUser(userDetail._id, { image: urlImage }));
         setUpdate(true);
+        /* setUpdateForm(false) */
         alert("Imagen cargada con exito");
       });
     fileInput.current.value = null;
   };
 
+  const closeForm = () => {
+    setUpdateForm(false);
+  };
+
+  function handleOnChange(e) {
+    setInput(e.target.value);
+    /*  setInput(
+       {
+         ...input,
+         [e.target.name]: e.target.value
+       }); */
+  }
+
+  /*   function handleOnChangeAge(e) {
+      setInput(
+        {
+          ...input,
+          [e.target.name]: Number(e.target.value)
+        });
+    } */
+
+  function handleSelect(e) {
+    e.preventDefault();
+    setInput({
+      ...input,
+      interests: [...new Set([...input.interests, e.target.value])],
+    });
+
+  }
+
+  function handleDeleteInterests(e) {
+    e.preventDefault();
+    setInput({
+      ...input,
+      interests: [...input.interests.filter((i) => i !== e.target.value)],
+    });
+  }
+
+  function handleSendInterests(e) {
+    e.preventDefault();
+    dispatch(updateUser(userDetail._id, { [e.target.name]: input.interests }))
+    setUpdate(true);
+    alert("Datos actualizados con exito");
+    setInput({
+      interests: []
+    })
+
+  }
+
+  function handleSend(e) {
+    e.preventDefault();
+    dispatch(updateUser(userDetail._id, { [e.target.name]: input }));
+    /* dispatch(updateUser(userDetail._id,  [e.target.name]: input)); */
+    setUpdate(true);
+    alert("Datos actualizados con exito");
+    setInput({
+      name: "",
+      age: "",
+      description: "",
+      interests: []
+    })
+
+  }
+
   return (
     <>
       <div>
         <div>
+          <button onClick={closeForm}>X</button>
           <input
             className="selectAr"
             type="file"
@@ -45,176 +121,121 @@ const Formu = ({ setUpdate }) => {
             }}
           />
           <button className="cargar" onClick={uploadImage}>
-            Cargar Imagen
+            Modificar Imagen
           </button>
         </div>
       </div>
-      <Formik
-        initialValues={{
-          name: "",
-          // email: "",
-          // age: "",
-          // birthday: "",
-          // nickname: "",
-          // password: "",
-          gender: "",
-          genderInt: "",
-          henryLevel: "",
-          description: "",
-        }}
-        validate={(valores) => {
-          let errores = {};
+      <form>
 
-          if (!valores.name) {
-            errores.name = "Por favor ingresa un nombre";
-          } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.name)) {
-            errores.name = "El nombre solo puede contene letras y espacios";
+        <label  > Tu nombre: </label>
+
+        <input onChange={handleOnChange} type="text" value={input.name} name="name" placeholder="Escribe tu nombre" />
+        <button name="name" onClick={(e) => handleSend(e)}> Modificar </button>
+      </form>
+
+      <form>
+
+        <label > Tu edad: </label>
+
+        <input onChange={handleOnChange} value={input.age} type="text" name="age" placeholder="Escribe tu edad" />
+        <button name="age" onClick={handleSend}> Modificar </button>
+      </form>
+
+      <form>
+
+        <label > Tu email: </label>
+
+        <input onChange={handleOnChange} type="text" value={input.name} name="email" placeholder="Escribe tu email" />
+        <button name="email" onClick={(e) => handleSend(e)}> Modificar </button>
+      </form>
+
+      <form>
+
+        <label > Tu genero: </label>
+        <select onChange={handleOnChange} value={input.gender} name="gender">
+          <option>Seleccionar</option>
+          <option value={'male'}>Hombre</option>
+          <option value={'female'}>Mujer</option>
+        </select>
+        <button name="gender" onClick={handleSend}> Modificar </button>
+      </form>
+
+
+      <div>
+        <label> Busco encontrarme con: </label>
+
+        <select onChange={handleOnChange} type="text" value={input.genderInt} name="genderInt">
+          <option disabled>Seleccionar</option>
+          <option value="male">Hombre</option>
+          <option value="female">Mujeres</option>
+          <option value="both">Hombres o Mujeres</option>
+        </select>
+        <button name="genderInt" onClick={handleSend}> Modificar </button>
+      </div>
+
+      <div>
+        <label> Intereses: </label>
+
+        <select onChange={handleSelect} type="text" value={input.interests} name="interests">
+
+          <option key={"i"} value={""} disabled >Ingresa tu interes</option>
+
+          {
+            interests.map((i) => {
+              return (<option key={i} value={i} >{i}</option>)
+            })
           }
 
-          // if (!valores.age) {
-          // 	errores.age = 'Por favor ingrese la edad'
-          // } else if (!/[0-9]+/.test(valores.age)) {
-          // 	errores.age = 'El campo solo admite numeros'
-          // }
-          // if (!valores.birthday) {
-          // 	errores.birthday = 'Por favor ingresa una fecha de nacimiento'
-          // } else if (!/^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[1-2])\1\d{4}$/.test(valores.birthday)) {
-          // 	errores.birthday = 'Ingrese correctamente la fecha de nacimiento'
-          // }
+        </select>
 
-          if (!valores.gender) {
-            errores.gender = "Por favor selecciona un genero";
-          }
-          if (!valores.genderInt) {
-            errores.genderInt = "Por favor selecciona un genero de interes";
-          }
+        <button name="interests" onClick={handleSendInterests}> Modificar </button>
+      </div>
 
-          if (!valores.henryLevel) {
-            errores.henryLevel = "Por favor selecciona una opcion";
-          }
-          if (!valores.description) {
-            errores.description =
-              "Por favor escribe una descripcion acerca de ti";
-          }
-          // FALTA VER VALIDACION DEL NIKNAME CON EL ESTADO DE TODOS LOS USUARIOS DE LA DB !!!!!!
+      <div /* className="formsubtitle" */>
+        <p> HAS ELEGIDO:</p>
+        <ul>
+          {input.interests &&
+            input.interests.map((i) => (
+              <div key={i} className="typeselected">
+                <p>{i}</p>
+                <button
+                  className="delbutton"
+                  value={i}
+                  onClick={handleDeleteInterests}
+                >
+                  x
+                </button>
+              </div>
+            ))}
+        </ul>
+      </div>
 
-          return errores;
-        }}
-        onSubmit={(valores, { resetForm }) => {
-          dispatch(updateUser(userDetail._id, valores));
-          resetForm();
-          setUpdate(true);
-          alert("Solicitud de actualizacion enviada");
-        }}>
-        {({ errors }) => (
-          <Form className="formulario">
-            <div>
-              <label htmlFor="name">El Nombre que quieres mostrar</label>
-              <Field
-                input="text"
-                name="name"
-                placeholder="Escribe un nombre.."
-              />
-              <ErrorMessage
-                name="name"
-                component={() => <div className="error">{errors.name}</div>}
-              />
-            </div>
+      <div>
+        <label> Mi etapa en el Bootcamp de Henry </label>
 
-            {/* <div>
-							<label htmlFor='age'>Edad</label>
-							<Field
-								input='number'
-								name='age'
-								placeholder="Escribe tu edad"
-							/>
-							<ErrorMessage name='age' component={() => (<div className='error'>{errors.age}</div>)} />
-						</div>
+        <select onChange={handleOnChange} value={input.henryLevel} type="text" name="henryLevel">
+          <option>Seleccionar</option>
+          <option value="m1">M1</option>
+          <option value="m2">M2</option>
+          <option value="m3">M3</option>
+          <option value="m4">M4</option>
+          <option value="m5">M5</option>
+          <option value="m6">M6</option>
+          <option value="pi">PI</option>
+          <option value="pf">PF</option>
+          <option value="graduate">Graduado</option>
+        </select>
+        <button name="henryLevel" onClick={handleSend}> Modificar </button>
+      </div>
 
-						<div>
-							<label> Fecha de nacimiento</label>
-							<Field
-								type="text"
-								name="birthday"
-								placeholder='dd/mm/aaaa'
-							/>
-							<ErrorMessage name='birthday' component={() => (<div className='error'>{errors.birthday}</div>)} />
-						</div> */}
-            {/* <div>
-							<label>Nombre de Usuario</label>
-							<Field
-								type="text"
-								name="nickname"
-								placeholder="Escribe un nombre de usurario"
-							/>
-						</div> */}
+      <form>
 
-            <div>
-              <label>Me identifico como...</label>
-              <label>
-                <Field type="radio" name="gender" value="male" /> Hombre
-              </label>
-              <label>
-                <Field type="radio" name="gender" value="female" /> Mujer
-              </label>
-              <ErrorMessage
-                name="gender"
-                component={() => <div className="error">{errors.gender}</div>}
-              />
-            </div>
 
-            <div>
-              <label>Busco encontrarme con...</label>
-              <label>
-                <Field type="radio" name="genderInt" value="male" /> Hombres
-              </label>
-              <label>
-                <Field type="radio" name="genderInt" value="female" /> Mujeres
-              </label>
-              <label>
-                <Field type="radio" name="genderInt" value="both" /> Ambos
-              </label>
-              <ErrorMessage
-                name="genderInt"
-                component={() => (
-                  <div className="error">{errors.genderInt}</div>
-                )}
-              />
-            </div>
+        <label > Sobre mi: </label>
 
-            <div>
-              <label>Estapa del Bootcamp</label>
-
-              <Field name="henryLevel" as="select">
-                <option value="m1">M 1</option>
-                <option value="m2">M 2</option>
-                <option value="m3">M 3</option>
-                <option value="m4">M 4</option>
-                <option value="m5">M 5</option>
-                <option value="m6">M 6</option>
-                <option value="graduado">Graduado</option>
-              </Field>
-              <ErrorMessage
-                name="henryLevel"
-                component={() => (
-                  <div className="error">{errors.henryLevel}</div>
-                )}
-              />
-            </div>
-            <div>
-              <label>Sobre mi:</label>{" "}
-              <Field name="description" as="textarea" placeholder="Mensaje" />
-              <ErrorMessage
-                name="description"
-                component={() => (
-                  <div className="error">{errors.description}</div>
-                )}
-              />
-            </div>
-            <button type="submit">Actualizar Datos</button>
-          </Form>
-        )}
-      </Formik>
+        <textarea onChange={handleOnChange} type="text" value={input.description} name="description" />
+        <button name="description" onClick={handleSend}> Modificar </button>
+      </form>
     </>
   );
 };

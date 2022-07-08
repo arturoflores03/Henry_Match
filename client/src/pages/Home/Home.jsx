@@ -8,42 +8,21 @@ import LoginButton from "../../components/LoginButton/LoginButton";
 import Header from "../../components/Header/Header";
 import Cards from "../../components/Card";
 import Loader from "../../components/Loader/Loader";
-//import Detail from "../../components/Detail/Detail";
+import Copyright from "../../components/Copyright/Copyright";
 import BottomBar from "../../components/BottomBar";
-
-// import MyNetwork from "../../components/Chat/MyNetwork";
-// import ChatRoom from "../ChatRoom/ChatRoom";
 
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
 
-import { filterByMe, filterUserByMatches, getUsers } from "../../redux/actions";
-import { getUserByNick, clearUserDetail } from "../../redux/actions/index";
+import { filterByMe, getUsers } from "../../redux/actions";
+import { getUserByNick } from "../../redux/actions/index";
 
 //======ESTILO E IMAGENES
-import { Typography, Link, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid } from "@mui/material";
 import HenryGirl from "../../assets/HenryGirl.jpg";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Modal from "../../components/Modal/Modal";
-
-//PABLO CUANDO PUEDAS CONTAME DE ESTA FUNCION <`*.*´> (ZAYRA)
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}>
-      <Link color="inherit" href="#">
-        Henry Match
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {". "}
-      Hecho con <FavoriteIcon fontSize="small" /> por alumnos de Henry
-    </Typography>
-  );
-}
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -51,77 +30,92 @@ const Home = () => {
   const userMatch = useSelector((state) => state.userMatch);
   const users = useSelector((state) => state.users);
   const userDetail = useSelector((state) => state.userDetail);
+
   //MODAL PARA CREAR USUARIO
   const [modal, setModal] = useState(false);
-  //KEY PARA CERRAR EL MODAL DE CREACION DE USUARIO
-  const [key, setKey] = useState(false);
-  //USER DE AUTH0 EN LOCAL STORAGE
+
+  //ME TRAIGO EL USER DE AUTH0 DEL LOCAL STORAGE A ESTE ESTADO LOCAL
   const [localUser, setLocalUser] = useState(
     localStorage.getItem("localUser")
       ? JSON.parse(localStorage.getItem("localUser"))
       : []
   );
 
+  //OBJETO USER DE AUTH0 Y SU SUB (NUESTRO NICKNAME)
+  const userAuth = user;
+
   //PARA ABRIR MODAL PREMIUM
   const [premium, setPremium] = useState(false);
 
-  //PARA LLENAR EL STORE
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getUserByNick(localUser.sub));
-    /*  userDetail.length > 0
-      ? dispatch(filterByMe())
-      : console.log("HOME: userDetail está vacío"); */
-  }, []);
+  //IDENTIFICO CUANDO SE CREO UN USUARIO NUEVO
+  const [newUser, setNewUser] = useState(false);
 
-  //PARA FILTRAR LO QUE RENDERIZA CARD CUANDO SE MODIFICA USERDETAIL
-  useEffect(() => {
-    /*  userDetail.length > 0
-      ? dispatch(filterByMe())
-      : console.log("HOME: userDetail está vacío 2"); */
-  }, [userDetail]);
+  //IDENTIFICO CUANDO SE HA GENERADO UN CAMBIO EN CARDS
+  const [cardMoved, setCardMoved] = useState(false);
 
-  //PARA GUARDAR USER DE AUTH0 EN LOCALSTORAGE
-  useEffect(() => {
-    localStorage.setItem("localUser", JSON.stringify(localUser) ?? []);
-  }, [localUser]);
+  //IDENTIFICO CUANDO SE HA GENERADO UN CAMBIO EN CARDS
+  const [match, setMatch] = useState(false);
 
-  //MENSAJES
+  //PARA LLENAR EL LOCALSTORAGE CON EL USER DE AUTH0
   useEffect(() => {
-    if (user) {
-      const userid = {
-        name: user.name,
-        id: user.sub,
-        photoUrl: user.picture,
-        email: user.email || "exampleEmail@gmail.com",
-        description: "im Ready to get my first HenryMatch",
-        role: "user",
-      };
-
-      window.localStorage.setItem("currentTalkjsUser", JSON.stringify(userid));
+    if (userAuth) {
+      localStorage.setItem("localUser", JSON.stringify(userAuth) ?? []);
     }
-  }, [user]);
+  }, [userAuth]);
+
+  //PARA LLENAR EL STORE CON TODOS LOS USUARIOS Y USERDETAIL SI EL USUARIO YA ESTA LOGUEADO
+  useEffect(() => {
+    //SIN CONDICIONAL
+    dispatch(getUsers());
+
+    //EL USUARIO ACTUAL ESTA EN LA DB?
+    const userInDb = users.find((u) => u.nickname === userAuth.sub);
+
+    //ACTUALIZO USERDETAIL Y FILTROS AL VOLVER A HOME
+    if (isAuthenticated === true && userInDb) {
+      dispatch(getUserByNick(userAuth.sub));
+      dispatch(filterByMe());
+      console.log("uuuuuuuuser in DB", userInDb);
+    }
+
+    //PARA FILTRAR LO QUE RENDERIZA CARD CUANDO NO SE ABRIO EL MODAL
+    if (isAuthenticated === true && newUser === true) {
+      dispatch(filterByMe());
+      setNewUser(false);
+    } else {
+      console.log("USER DETAIL", Object.keys(userDetail).length > 0);
+    }
+  }, []);
 
   //PARA ABRIR MODAL DE CREACION DE USUARIO CUANDO NO ESTA EN LA DB
   useEffect(() => {
     if (isAuthenticated === true) {
-      //ME GUARDO EL SUB (NUESTRO NICKNAME) DEL USUARIO DE AUTH0 EN ESTA VARIABLE
-      const localUserNickname = user.sub;
-      console.log("localUser que contiene user Auth0", localUser.sub);
-      //EN ESTA VARIABLE SER GUARDA EL LOCAL USER SI ESTA EN LA DB
-      const userInDb = users.find((u) => u.nickname === localUserNickname);
+      //EL USUARIO ACTUAL ESTA EN LA DB?
+      const userInDb = users.find((u) => u.nickname === userAuth.sub);
 
-      //======> SI ESTAS EN LA DB =======> console.log(userInDb);
-      //SI NO HAY NADA EN userInDb SE ABRE EL MODAL
-      if (!userInDb || userInDb === undefined) {
-        setModal(true);
-      } else {
+      if (userInDb) {
         setModal(false);
         //SI EL USUARIO SI ESTABA EN NUESTRA DB SE LLENA EL userDetail DEL STORE
-        dispatch(getUserByNick(localUserNickname));
+        dispatch(getUserByNick(userAuth.sub));
+        dispatch(filterByMe());
+        console.log("nooooooooooo entre al modal", userAuth.sub);
+      } else {
+        setModal(true);
       }
     }
   }, [isAuthenticated]);
+
+  //PARA ACTUALIZAR DESPUES DE MOVER CARTAS O MATCHES
+  useEffect(() => {
+    if (cardMoved === true || match === true) {
+      dispatch(getUserByNick(userAuth.sub));
+      dispatch(filterByMe());
+
+      console.log("se han movido caaaaards o se ha matcheado");
+      setCardMoved(false);
+      setMatch(false);
+    }
+  }, [cardMoved, match]);
 
   return (
     <>
@@ -130,13 +124,21 @@ const Home = () => {
           <Loader />
         </>
       )}
-
-      <Modal modal={modal} setModal={setModal} setKey={setKey}></Modal>
+      <Modal
+        modal={modal}
+        setModal={setModal}
+        users={users}
+        userDetail={userDetail}
+        setNewUser={setNewUser}></Modal>
       {isAuthenticated ? (
         <Grid>
           <CssBaseline />
           <Header />
-          <Cards premium={premium} setPremium={setPremium} />
+          <Cards
+            setPremium={setPremium}
+            setCardMoved={setCardMoved}
+            setMatch={setMatch}
+          />
           <BottomBar premium={premium} setPremium={setPremium} />
         </Grid>
       ) : (
@@ -192,7 +194,7 @@ const Home = () => {
                     }}>
                     <LoginButton />
                   </Box>
-                  <Copyright sx={{ mt: 30 }} />
+                  <Copyright sx={{ mt: 25 }} />
                 </Box>
               </Box>
             </Grid>

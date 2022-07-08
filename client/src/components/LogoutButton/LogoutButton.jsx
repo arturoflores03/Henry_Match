@@ -9,6 +9,8 @@ const LogoutButton = () => {
 
   function handleClearDetail() {
     logout({ returnTo: window.location.origin });
+    //LIMPIO LOCALSTORAGE
+    localStorage.setItem("localUser", []);
     dispatch(clearUserDetail());
   }
 
@@ -19,7 +21,6 @@ const LogoutButton = () => {
       variant="contained"
       sx={{ mt: 3, mb: 2 }}
       onClick={handleClearDetail}>
-      {/* onClick={() => handleClearDetail()}> */}
       CERRAR SESION
     </Button>
   );

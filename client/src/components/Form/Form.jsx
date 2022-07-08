@@ -9,7 +9,17 @@ import "./Form.css";
 // renderer prop: renderizamos el formulario dentro de una funcion y por ahi le vamos a pasar props(valores) de Formik
 // Como es una funcion le puedo poner props e ingreso poniendo props.handleSubmit o sino {}
 
-const interests = ["moda", "artes marciales", "fiestas", "videojuegos", "deportes", "cine", "viajes", "lectura", "programar"]
+const interests = [
+  "moda",
+  "artes marciales",
+  "fiestas",
+  "videojuegos",
+  "deportes",
+  "cine",
+  "viajes",
+  "lectura",
+  "programar",
+];
 
 const Formu = ({ setUpdate, setUpdateForm }) => {
   const dispatch = useDispatch();
@@ -22,7 +32,7 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
     genderInt: "",
     henryLevel: "",
     description: "",
-    interests: []
+    interests: [],
   });
 
   const fileInput = useRef();
@@ -70,7 +80,6 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
       ...input,
       interests: [...new Set([...input.interests, e.target.value])],
     });
-
   }
 
   function handleDeleteInterests(e) {
@@ -83,13 +92,12 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
 
   function handleSendInterests(e) {
     e.preventDefault();
-    dispatch(updateUser(userDetail._id, { [e.target.name]: input.interests }))
+    dispatch(updateUser(userDetail._id, { [e.target.name]: input.interests }));
     setUpdate(true);
     alert("Datos actualizados con exito");
     setInput({
-      interests: []
-    })
-
+      interests: [],
+    });
   }
 
   function handleSend(e) {
@@ -102,9 +110,8 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
       name: "",
       age: "",
       description: "",
-      interests: []
-    })
-
+      interests: [],
+    });
   }
 
   return (
@@ -126,83 +133,121 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
         </div>
       </div>
       <form>
+        <label> Tu nombre: </label>
 
-        <label  > Tu nombre: </label>
-
-        <input onChange={handleOnChange} type="text" value={input.name} name="name" placeholder="Escribe tu nombre" />
-        <button name="name" onClick={(e) => handleSend(e)}> Modificar </button>
+        <input
+          onChange={handleOnChange}
+          type="text"
+          value={input.name}
+          name="name"
+          placeholder="Escribe tu nombre"
+        />
+        <button name="name" onClick={(e) => handleSend(e)}>
+          {" "}
+          Modificar{" "}
+        </button>
       </form>
 
       <form>
+        <label> Tu edad: </label>
 
-        <label > Tu edad: </label>
-
-        <input onChange={handleOnChange} value={input.age} type="text" name="age" placeholder="Escribe tu edad" />
-        <button name="age" onClick={handleSend}> Modificar </button>
+        <input
+          onChange={handleOnChange}
+          value={input.age}
+          type="text"
+          name="age"
+          placeholder="Escribe tu edad"
+        />
+        <button name="age" onClick={handleSend}>
+          {" "}
+          Modificar{" "}
+        </button>
       </form>
 
       <form>
+        <label> Tu email: </label>
 
-        <label > Tu email: </label>
-
-        <input onChange={handleOnChange} type="text" value={input.name} name="email" placeholder="Escribe tu email" />
-        <button name="email" onClick={(e) => handleSend(e)}> Modificar </button>
+        <input
+          onChange={handleOnChange}
+          type="text"
+          value={input.name}
+          name="email"
+          placeholder="Escribe tu email"
+        />
+        <button name="email" onClick={(e) => handleSend(e)}>
+          {" "}
+          Modificar{" "}
+        </button>
       </form>
 
       <form>
-
-        <label > Tu genero: </label>
+        <label> Tu genero: </label>
         <select onChange={handleOnChange} value={input.gender} name="gender">
           <option>Seleccionar</option>
-          <option value={'male'}>Hombre</option>
-          <option value={'female'}>Mujer</option>
+          <option value={"male"}>Hombre</option>
+          <option value={"female"}>Mujer</option>
         </select>
-        <button name="gender" onClick={handleSend}> Modificar </button>
+        <button name="gender" onClick={handleSend}>
+          {" "}
+          Modificar{" "}
+        </button>
       </form>
-
 
       <div>
         <label> Busco encontrarme con: </label>
 
-        <select onChange={handleOnChange} type="text" value={input.genderInt} name="genderInt">
-          <option disabled>Seleccionar</option>
+        <select
+          onChange={handleOnChange}
+          type="text"
+          value={input.genderInt}
+          name="genderInt">
+          <option disabled selected>
+            Seleccionar
+          </option>
           <option value="male">Hombre</option>
           <option value="female">Mujeres</option>
           <option value="both">Hombres o Mujeres</option>
         </select>
-        <button name="genderInt" onClick={handleSend}> Modificar </button>
+        <button name="genderInt" onClick={handleSend}>
+          Modificar
+        </button>
       </div>
 
       <div>
         <label> Intereses: </label>
-
-        <select onChange={handleSelect} type="text" value={input.interests} name="interests">
-
-          <option key={"i"} value={""} disabled >Ingresa tu interes</option>
-
-          {
-            interests.map((i) => {
-              return (<option key={i} value={i} >{i}</option>)
-            })
-          }
-
+        <select
+          onChange={handleSelect}
+          type="text"
+          value={input.interests}
+          name="interests">
+          <option disabled selected>
+            Ingresa tu interes
+          </option>
+          {interests.map((i) => {
+            return (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            );
+          })}
         </select>
 
-        <button name="interests" onClick={handleSendInterests}> Modificar </button>
+        <button name="interests" onClick={handleSendInterests}>
+          Modificar
+        </button>
       </div>
 
       <div /* className="formsubtitle" */>
         <p> HAS ELEGIDO:</p>
         <ul>
           {input.interests &&
-            input.interests.map((i) => (
-              <div key={i} className="typeselected">
+            input.interests.map((i, index) => (
+              <div key={index} className="typeselected">
                 <p>{i}</p>
                 <button
                   className="delbutton"
                   value={i}
-                  onClick={handleDeleteInterests}
-                >
+                  onClick={handleDeleteInterests}>
                   x
                 </button>
               </div>
@@ -213,7 +258,11 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
       <div>
         <label> Mi etapa en el Bootcamp de Henry </label>
 
-        <select onChange={handleOnChange} value={input.henryLevel} type="text" name="henryLevel">
+        <select
+          onChange={handleOnChange}
+          value={input.henryLevel}
+          type="text"
+          name="henryLevel">
           <option>Seleccionar</option>
           <option value="m1">M1</option>
           <option value="m2">M2</option>
@@ -225,16 +274,25 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
           <option value="pf">PF</option>
           <option value="graduate">Graduado</option>
         </select>
-        <button name="henryLevel" onClick={handleSend}> Modificar </button>
+        <button name="henryLevel" onClick={handleSend}>
+          {" "}
+          Modificar{" "}
+        </button>
       </div>
 
       <form>
+        <label> Sobre mi: </label>
 
-
-        <label > Sobre mi: </label>
-
-        <textarea onChange={handleOnChange} type="text" value={input.description} name="description" />
-        <button name="description" onClick={handleSend}> Modificar </button>
+        <textarea
+          onChange={handleOnChange}
+          type="text"
+          value={input.description}
+          name="description"
+        />
+        <button name="description" onClick={handleSend}>
+          {" "}
+          Modificar{" "}
+        </button>
       </form>
     </>
   );

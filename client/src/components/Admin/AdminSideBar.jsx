@@ -51,16 +51,14 @@ export default function AdminSideBar() {
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
       // onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+      onKeyDown={toggleDrawer(anchor, false)}>
       <List>
         <Divider
           sx={{
             "&::before, &::after": {
               borderColor: "light.main",
             },
-          }}
-        >
+          }}>
           <NavLink to="/chatroom">
             <Chip
               label="ADMIN"
@@ -74,7 +72,7 @@ export default function AdminSideBar() {
           </NavLink>
         </Divider>
         {["Usuarios", "Inbox"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key={index} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? (
@@ -93,16 +91,15 @@ export default function AdminSideBar() {
 
   return (
     <div>
-      {["left"].map((anchor) => (
-        <React.Fragment key={anchor}>
+      {["left"].map((anchor, index) => (
+        <React.Fragment key={index}>
           <IconButton onClick={toggleDrawer(anchor, true)}>
             <MenuIcon color="primary" />
           </IconButton>
           <Drawer
             anchor={anchor}
             open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
+            onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </Drawer>
         </React.Fragment>

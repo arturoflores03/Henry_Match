@@ -35,12 +35,10 @@ import {
 
 import { red } from "@mui/material/colors";
 import ShareIcon from "@mui/icons-material/Share";
-import InfoIcon from "@mui/icons-material/Info";
 import { MsgContainer, MsgText } from "../Card/StyleMsg";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import InterestsIcon from "@mui/icons-material/Interests";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CakeIcon from "@mui/icons-material/Cake";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
@@ -51,6 +49,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 import Swal from "sweetalert2";
 
+//=============================================
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -67,10 +66,18 @@ const messages = [
   "Por el momento no hay más usuarios!",
   "Por favor regresa más tarde.",
 ];
+//=============================================
 
-export default function Cards({ premium, setPremium }) {
+export default function Cards({ setPremium, setCardMoved, setMatch }) {
+  const dispatch = useDispatch();
+
   const [expanded, setExpanded] = React.useState(false);
 
+  const db = useSelector((state) => state.usersSelected);
+
+  const currentUser = useSelector((state) => state.userDetail);
+
+  //================================
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -89,74 +96,14 @@ export default function Cards({ premium, setPremium }) {
       clearInterval(intervalId);
     };
   }, []);
+  //================================
 
-  //*******//
-
-  const db = useSelector((state) => state.usersSelected);
-
-  const currentUser = useSelector((state) => state.userDetail);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, []);
-
+  //ULTIMO INDICE DEL ARREGLO DE USUARIOS
   const [currentIndex, setCurrentIndex] = React.useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
+
+  // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
-
-  //infinito
-  /*  useEffect(()=>{
-    dispatch(filterByMe())
-    console.log('ahora me estoy montando')
-    }) */
-
-  //convierte al userDetail en null
-  /* useEffect(()=>{
-      dispatch(filterByMe())
-      console.log('ahora me estoy montando')
-      },[currentUser]) */
-
-  //FILTERBYME EN EL EFFECT TE DEVUELVE  USERDETAIL NULL!!!!!!!!
-
-  /*  useEffect(()=>{
-        dispatch(filterByMe())
-        console.log('ahora me estoy montando')
-        },[]) */
-
-  /*  useLayoutEffect(()=>{
-      dispatch(filterByMe())
-      dispatch(getUsers())
-      },[]) */
-
-  //userDetail en NULL
-  /*  useEffect(()=>{
-      dispatch(getUserByNick(currentUser.nickname));
-      dispatch(getUsers())
-      dispatch(filterByMe())
-        console.log('ahora me estoy montando')
-      },[updateMatches]) 
- */
-  //userDetail en NULL
-  /* useEffect(()=>{
-        dispatch(getUsers())
-        dispatch(getUserByNick(currentUser.nickname));
-          console.log('ahora me estoy montando')
-        },[updateMatches]) 
- */
-  /*  useEffect(()=>{
-          dispatch(getUsers())
-                      console.log('ahora me estoy montando')
-          },[updateMatches])  */
-  //atrasado 2 pasos
-  /*    useEffect(()=>{
-            dispatch(getUsers())
-            },[])  */
-
-  /*    useEffect(()=>{
-              return () => dispatch(clearUserDetail())
-              },[dispatch])   */
 
   const childRefs = useMemo(
     () =>
@@ -166,20 +113,20 @@ export default function Cards({ premium, setPremium }) {
     []
   );
 
+  //ACTUALIZA EL INDICE ACTUAL DEL ARREGLO
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val);
     currentIndexRef.current = val;
   };
 
+  //EL INDICE ACTUAL ES MENOR QUE EL ULTIMO INDICE DEL ARREGLO?
   const canGoBack = currentIndex < db.length - 1;
-
+  //EL INDICE ACTUAL ES >= 0
   const canSwipe = currentIndex >= 0;
 
+  //FUNCION QUE SETEA LA ULTIMA DIRECCION Y MERMA EL INDICE ACTUAL
   const swiped = (direction, name, index, id) => {
-    const currentCard = db.find((ss) => ss._id === id);
-
-    dispatch(getUserByNick(currentUser?.nickname));
-
+    const currentCard = db.find((user) => user._id === id);
     const miID = currentUser?._id;
     const cardID = currentCard._id;
 
@@ -195,9 +142,7 @@ export default function Cards({ premium, setPremium }) {
           likeGiven: cardID,
         })
       );
-
-      dispatch(getUserByNick(currentUser?.nickname));
-      dispatch(filterByMe());
+      setCardMoved(true);
     }
 
     if (direction === "left") {
@@ -212,9 +157,7 @@ export default function Cards({ premium, setPremium }) {
           dislikeReceived: miID,
         })
       );
-
-      dispatch(getUserByNick(currentUser?.nickname));
-      dispatch(filterByMe());
+      setCardMoved(true);
     }
 
     const foundMatch = currentCard.likeGiven?.includes(miID);
@@ -225,6 +168,7 @@ export default function Cards({ premium, setPremium }) {
           matches: miID,
         })
       );
+      //ALERT
       Swal.fire({
         title: `hiciste match con ${name}`,
         text: "Felicidades!!",
@@ -238,14 +182,14 @@ export default function Cards({ premium, setPremium }) {
           matches: id,
         })
       );
-      alert(`hiciste match con ${name}`);
-      dispatch(getUserByNick(currentUser?.nickname));
+      setMatch(true);
     }
 
     setLastDirection(direction);
     updateCurrentIndex(index - 1);
   };
 
+  //// handle the case in which go back is pressed before card goes outOfFrame
   const outOfFrame = (name, idx) => {
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
   };
@@ -256,6 +200,7 @@ export default function Cards({ premium, setPremium }) {
     }
   };
 
+  // increase current index and show card
   const goBack = async () => {
     if (!canGoBack) {
       setPremium(true);
@@ -271,6 +216,7 @@ export default function Cards({ premium, setPremium }) {
       {db.length ? (
         db.map((character, index) => (
           <Box
+            key={character._id}
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -286,7 +232,6 @@ export default function Cards({ premium, setPremium }) {
               ref={childRefs[index]}
               className="swipe"
               preventSwipe={["up", "down"]}
-              key={character.id}
               onSwipe={(dir) =>
                 swiped(dir, character.name, index, character._id)
               }
@@ -300,6 +245,14 @@ export default function Cards({ premium, setPremium }) {
                   borderColor: "none",
                   borderRadius: 3,
                 }}>
+                {/* MARTIN: NOMBRE Y EDAD
+                  <ImageListItemBar
+                    title={character.name}
+                    sx={{
+                      background:
+                        "linear-gradient(to bottom, rgba(0,0,0,0.7)0%, rgba(0,0,0,0.3)70% rgba(0,0,0,0)100%) ",
+                    }}
+                    position="bottom"></ImageListItemBar> */}
                 <CardMedia
                   component="img"
                   height="566"
@@ -315,7 +268,7 @@ export default function Cards({ premium, setPremium }) {
                       // letterSpacing: 1,
                       fontFamily: "Proxima Nova",
                     }}>
-                    {character.name}{" "}
+                    {character.name}
                     <Typography
                       sx={{
                         fontWeight: 300,
@@ -335,7 +288,6 @@ export default function Cards({ premium, setPremium }) {
                     <ExpandMoreIcon color="light" />
                   </ExpandMore>
                 </CardActions>
-
                 <Collapse
                   in={expanded}
                   timeout="auto"
@@ -452,7 +404,7 @@ export default function Cards({ premium, setPremium }) {
             <CloseIcon font="large" />
           </IconButton>
           <IconButton
-            style={{ backgroundColor: !canGoBack }}
+            style={{ backgroundColor: !canGoBack /* && "#83838077" */ }} //preguntar sobre esto
             onClick={() => goBack()}
             color="primary"
             size="large">

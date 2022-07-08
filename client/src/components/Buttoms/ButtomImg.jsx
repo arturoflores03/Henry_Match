@@ -91,7 +91,7 @@ export default function ButtonBases() {
         {images.map((image) => (
           <ImageButton
             focusRipple
-            key={image.title}
+            key={image.url}
             style={{
               width: image.width,
             }}>

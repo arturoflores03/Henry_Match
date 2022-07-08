@@ -25,10 +25,28 @@ const Profile = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   // PARA ACTUALIZAR LO QUE SE RENDERIZA AL MODICAR UN DATO DEL FORMU
   const [update, setUpdate] = useState(false);
-  // RENDERIZADO CONDICIONAL DEL FORM
+  // PARA VER EL FORM
   const [updateForm, setUpdateForm] = useState(false);
   const dispatch = useDispatch();
 
+  //ME TRAIGO EL USER DE AUTH0 DEL LOCAL STORAGE A ESTE ESTADO LOCAL
+  const [localUser, setLocalUser] = useState(
+    localStorage.getItem("localUser")
+      ? JSON.parse(localStorage.getItem("localUser"))
+      : []
+  );
+
+  //OBJETO USER DE AUTH0 Y SU SUB (NUESTRO NICKNAME)
+  const userAuth = user;
+
+  //PARA LLENAR EL LOCALSTORAGE CON EL USER DE AUTH0
+  useEffect(() => {
+    if (userAuth) {
+      localStorage.setItem("localUser", JSON.stringify(userAuth) ?? []);
+    }
+  }, [userAuth]);
+
+  //ACTUALIZA EL PROFILE LUEGO DE LAS MODIFICACIONES
   useEffect(() => {
     dispatch(getUserByNick(userProfile.nickname));
     setUpdate(false);
@@ -40,7 +58,6 @@ const Profile = () => {
   };
 
   // BOTON PARA ELIMINAR CUENTA :
-
   function handleUserActive() {
     dispatch(updateUser(userProfile._id, { active: false }));
     /*   setUpdate(true);
@@ -66,7 +83,6 @@ const Profile = () => {
             <Typography variant="h2" color="text.secondary">
               {userProfile.name}
             </Typography>
-            {/*  <h1 className="perfil">Perfil del Usuario</h1> */}
             <div className="label">
               {userProfile.name ? (
                 <p> El nombre que elegiste para mostrar: {userProfile.name} </p>
@@ -77,7 +93,7 @@ const Profile = () => {
 
             <div className="label">
               {userProfile.image ? (
-                /* .length >= 0 ? */ <img
+                <img
                   src={userProfile.image}
                   alt={userProfile.name}
                   className="imagenperfil"
@@ -93,7 +109,6 @@ const Profile = () => {
                 <p className="alert"> Todavia no ingresaste tu edad</p>
               )}
             </div>
-
             <div className="label">
               {userProfile.email ? (
                 <p> Tu email: {userProfile.email} </p>
@@ -101,7 +116,6 @@ const Profile = () => {
                 <p className="alert"> Todavia no ingresaste tu email</p>
               )}
             </div>
-
             <div className="label">
               {userProfile.gender ? (
                 <p>
@@ -131,10 +145,9 @@ const Profile = () => {
                 </p>
               ) : (
                 <p className="alert">
-                  {" "}
-                  Todavia no definiste tu genero de interes{" "}
+                  Todavia no definiste tu genero de interes
                 </p>
-              )}{" "}
+              )}
             </div>
 
             <div className="label">
@@ -148,17 +161,15 @@ const Profile = () => {
             <div className="label">
               {userProfile.interests ? (
                 <p>
-                  {" "}
                   Tus Intereses son:{" "}
                   {userProfile.interests.map((i) => (
-                    <p>{i}</p>
-                  ))}{" "}
+                    <p key={i}>{i}</p>
+                  ))}
                 </p>
               ) : (
                 <p className="alert"> Ingresa tus intereses</p>
               )}
             </div>
-
             <div className="label">
               {userProfile.henryLevel ? (
                 <p> Etapa del Bootcamp: {userProfile.henryLevel} </p>
@@ -189,7 +200,6 @@ const Profile = () => {
             <button className="eliminar" onClick={handleUserActive}>
               ELIMINAR CUENTA
             </button>
-
             <LogoutButton />
           </div>
 

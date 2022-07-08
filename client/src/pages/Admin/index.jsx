@@ -23,40 +23,31 @@ import AdminUsers from "../../components/Admin/AdminUsers";
 import AdminUsers2 from "../../components/Admin/Users/Users";
 import { NavLink } from "react-router-dom";
 
-//PABLO CUANDO PUEDAS CONTAME DE ESTA FUNCION <`*.*´> (ZAYRA)
-
 const Admin = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated, isLoading } = useAuth0();
   const render = useSelector((state) => state.admin);
   const userDetail = useSelector((state) => state.userDetail);
-  console.log("aaaaaaaaa", userDetail);
-
   const iAmAdmin = userDetail?.isAdmin;
-  // const localUserNickname = user.sub;
+  const userAuth = user;
+
+  //ME TRAIGO EL USER DE AUTH0 DEL LOCAL STORAGE A ESTE ESTADO LOCAL
   const [localUser, setLocalUser] = useState(
     localStorage.getItem("localUser")
       ? JSON.parse(localStorage.getItem("localUser"))
       : []
   );
-  console.log(localUser);
+  // console.log(localUser);
 
-  const userAuth = user;
+  //PARA LLENAR EL LOCALSTORAGE CON EL USER DE AUTH0
   useEffect(() => {
     localStorage.setItem("localUser", JSON.stringify(userAuth) ?? []);
   }, [userAuth]);
 
-  useEffect(() => {
-    getUsers();
-    // if (isAuthenticated) {
-    //   dispatch(getUserByNick(localUserNickname));
-    // }
-    dispatch(getUserByNick(localUser.sub));
-  }, []);
-
   //PARA LLENAR EL STORE CON TODOS LOS USUARIOS
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getUserByNick(localUser.sub));
     dispatch(renderAdmin("users"));
   }, []);
 

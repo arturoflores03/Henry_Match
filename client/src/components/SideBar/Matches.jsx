@@ -82,7 +82,7 @@ export default function Matches() {
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       {user.map((us) => {
-        <ListItem key={us.name} alignItems="flex-start">
+        <ListItem key={us.img} alignItems="flex-start">
           <ListItemAvatar>
             <Avatar alt={us.name} src={us.img} />
           </ListItemAvatar>
@@ -97,9 +97,9 @@ export default function Matches() {
             </NavLink>
           </IconButton>
         </ListItem>;
-
-        <Divider variant="inset" component="li" color="primary" />;
-      })}
+        //este divider no deberia ir afuera???
+      })}{" "}
+      <Divider variant="inset" component="li" color="primary" />;
       {/*       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />

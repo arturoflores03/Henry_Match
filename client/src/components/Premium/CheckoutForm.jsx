@@ -93,7 +93,7 @@ const Form = () => {
         rowHeight={70}>
         {imgs.map((item) => (
           <ImageListItem
-            key={item.img}
+            key={item.title}
             cols={item.cols || 1}
             rows={item.rows || 1}
             sx={{ height: "100% !important" }}>

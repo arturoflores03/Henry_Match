@@ -32,7 +32,7 @@ export default function AdminUsers() {
   return (
     <Box sx={{ marginTop: 10 }}>
       {db.map((user) => (
-        <Box sx={{ marginTop: 2 }}>
+        <Box key={user} sx={{ marginTop: 2 }}>
           <Box sx={{ display: "inline-flex" }}>
             <Typography variant="h5">{user.name}</Typography>
           </Box>
@@ -40,8 +40,7 @@ export default function AdminUsers() {
             sx={{
               //   display: "inline",
               textAlign: "end",
-            }}
-          >
+            }}>
             <GreenSwitch {...label} />
           </Box>
           <Divider sx={{ borderColor: "white" }} />

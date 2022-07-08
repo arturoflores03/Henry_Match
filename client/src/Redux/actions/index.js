@@ -52,7 +52,7 @@ export function getUserByNick(nickname) {
   };
 }
 
-//RUTA QUE ESTAS USANDO "https://henrymatch-pg.herokuapp.com/users";
+//RUTA QUE ESTAS USANDO "https://henrymatch-pg.herokuapp.com/users/";
 export function createUser(data) {
   return async function (dispatch) {
     try {
@@ -74,7 +74,7 @@ export function updateUser(id, data) {
         `https://henrymatch-pg.herokuapp.com/usersID/${id}`,
         data
       );
-     
+
       return dispatch({
         type: UPDATE_USER,
         payload: user.data,

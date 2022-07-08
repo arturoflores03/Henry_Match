@@ -289,8 +289,7 @@ export default function AdminUsers2() {
                   direction="row"
                   alignItems="center"
                   justifyContent="space-between"
-                  mb={5}
-                >
+                  mb={5}>
                   <Typography variant="h4" gutterBottom>
                     Gestion de usuarios
                   </Typography>
@@ -302,8 +301,7 @@ export default function AdminUsers2() {
                     startIcon={
                       <Iconify icon="eva:plus-fill" sx={{ color: "white" }} />
                     }
-                    color="secondary"
-                  >
+                    color="secondary">
                     {selected[1] === false ? (
                       <Typography color="white">Perdonar</Typography>
                     ) : (
@@ -316,8 +314,7 @@ export default function AdminUsers2() {
                     component={RouterLink}
                     to="#"
                     startIcon={<Iconify icon="eva:plus-fill" />}
-                    color="info"
-                  >
+                    color="info">
                     {selected[2] === true ? "Quitar ADMIN" : "Hacer ADMIN"}
                   </Button>
                 </Stack>
@@ -367,8 +364,7 @@ export default function AdminUsers2() {
                                   tabIndex={-1}
                                   role="checkbox"
                                   selected={isItemSelected}
-                                  aria-checked={isItemSelected}
-                                >
+                                  aria-checked={isItemSelected}>
                                   <TableCell padding="checkbox">
                                     <Checkbox
                                       checked={isItemSelected}
@@ -380,13 +376,11 @@ export default function AdminUsers2() {
                                   <TableCell
                                     component="th"
                                     scope="row"
-                                    padding="none"
-                                  >
+                                    padding="none">
                                     <Stack
                                       direction="row"
                                       alignItems="center"
-                                      spacing={2}
-                                    >
+                                      spacing={2}>
                                       <Avatar alt={name} src={image} />
                                       <Typography variant="subtitle2" noWrap>
                                         {name}
@@ -420,8 +414,7 @@ export default function AdminUsers2() {
                               <TableCell
                                 align="center"
                                 colSpan={6}
-                                sx={{ py: 3 }}
-                              >
+                                sx={{ py: 3 }}>
                                 <SearchNotFound searchQuery={filterName} />
                               </TableCell>
                             </TableRow>
@@ -443,7 +436,7 @@ export default function AdminUsers2() {
                 </Card>
               </Container>
             ) : (
-              <p></p>
+              <p>...</p>
             )}
           </Page>
         </MainStyle>

@@ -52,11 +52,10 @@ export default function SideBar() {
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
       // onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+      onKeyDown={toggleDrawer(anchor, false)}>
       <List>
         {[""].map((text, index) => (
-          <ListItem key={text}>
+          <ListItem key={index}>
             <ListItemButton>
               <NavLink to="/profile">
                 <ListItemIcon>
@@ -64,15 +63,13 @@ export default function SideBar() {
                     <Box
                       sx={{
                         transform: "translate(30%)",
-                      }}
-                    >
+                      }}>
                       <Tooltip title="Mi Perfil">
                         <IconButton>
                           <Avatar
                             src={user.picture}
                             alt={user.name}
-                            sx={{ width: 56, height: 56 }}
-                          ></Avatar>
+                            sx={{ width: 56, height: 56 }}></Avatar>
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Editar Perfil">
@@ -97,8 +94,7 @@ export default function SideBar() {
           "&::before, &::after": {
             borderColor: "light.main",
           },
-        }}
-      >
+        }}>
         {" "}
         <NavLink to="/matches">
           <Chip
@@ -138,8 +134,7 @@ export default function SideBar() {
           <Drawer
             anchor={anchor}
             open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
+            onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </Drawer>
         </React.Fragment>

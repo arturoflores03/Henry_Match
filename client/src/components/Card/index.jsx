@@ -33,8 +33,6 @@ import {
   Slide,
 } from "@mui/material";
 
-import { red } from "@mui/material/colors";
-import ShareIcon from "@mui/icons-material/Share";
 import { MsgContainer, MsgText } from "../Card/StyleMsg";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import InterestsIcon from "@mui/icons-material/Interests";

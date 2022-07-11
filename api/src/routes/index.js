@@ -1,5 +1,10 @@
 const express = require("express");
 const router = express.Router();
+//STRIPE
+const Stripe = require("stripe");
+require("dotenv").config();
+const { API_STRIPE } = process.env;
+const stripe = new Stripe(API_STRIPE);
 
 const { userDelete } = require("../controllers/userDelete");
 const { userGet } = require("../controllers/userGet");
@@ -12,13 +17,6 @@ const { interestsPut } = require("../controllers/interestsPut");
 const { interestsId } = require("../controllers/interestsId");
 const { interestsDelete } = require("../controllers/interestsDelete");
 const { userNickname } = require("../controllers/userNickname");
-//mercadopago ruta
-/* const subscriptionController = require("../controllers/subscription");
-const subscriptionService = require("../services/subscription");
-
-const subscriptionInstance = new subscriptionController(
-  new subscriptionService()
-); */
 
 router.get("/users/:nickname", userNickname);
 router.get("/users", userGet);
@@ -32,14 +30,26 @@ router.put("/interests/:id", interestsPut);
 router.get("/interests/:id", interestsId);
 router.delete("/interests/:id", interestsDelete);
 
-//mercadopago rutas: prueba
-/* router.get("/subscription", function (req, res, next) {
-  subscriptionInstance.getSubscriptionLink(req, res);
-}); */
-
-//mercadopago rutas: ruta definitiva
-/* router.post("/subscription", function (req, res, next) {
-  subscriptionInstance.postSubscriptionLink(req, res);
-}); */
+//RUTA STRIPE
+router.post("/subscription", async (req, res) => {
+  try {
+    const { id, amount } = req.body;
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      /*    transfer_data: {
+        amount: amount * 0.1,
+        destination: "ch_3LJf95J7NqOhO9cb0l0P5J6b",
+      }, */
+      currency: "USD",
+      description: "Henry Match subscription",
+      payment_method: id,
+      //transfer_group: "SUBSCRIPTIONS",
+      confirm: true,
+    });
+    return res.status(200).send({ message: "ok" });
+  } catch (e) {
+    res.json({ message: e.raw.message });
+  }
+});
 
 module.exports = router;

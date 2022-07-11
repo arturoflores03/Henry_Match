@@ -80,7 +80,7 @@ const ImageMarked = styled("span")(({ theme }) => ({
 
 export default function ButtonBases() {
   return (
-    <NavLink to="/stripe">
+    <NavLink to="/subscription">
       <Box
         sx={{
           display: "flex",

@@ -4,56 +4,46 @@ import { useSelector, useDispatch } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 
 //======IMPORTACIONES DE COMPONENTES
-import LoginButton from "../../components/LoginButton/LoginButton";
 import Header from "../../components/Header/Header";
 import Cards from "../../components/Card";
 import Loader from "../../components/Loader/Loader";
-//import Detail from "../../components/Detail/Detail";
 import BottomBar from "../../components/BottomBar";
 
-// import MyNetwork from "../../components/Chat/MyNetwork";
-// import ChatRoom from "../ChatRoom/ChatRoom";
-
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
-
 import { filterByMe, filterUserByMatches, getUsers } from "../../redux/actions";
-import { filterByGender } from "../../redux/actions";
-import { getUserByNick, clearUserDetail } from "../../redux/actions/index";
+import { getUserByNick } from "../../redux/actions/index";
 
 //======ESTILO E IMAGENES
-import { Typography, Link, Box, Grid, Avatar, CardMedia } from "@mui/material";
-import HenryGirl from "../../assets/HenryGirl.jpg";
-import CssBaseline from "@mui/material/CssBaseline";
-import Paper from "@mui/material/Paper";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Grid } from "@mui/material";
 import Modal from "../../components/Modal/Modal";
-
-//PABLO CUANDO PUEDAS CONTAME DE ESTA FUNCION <`*.*´> (ZAYRA)
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}>
-      <Link color="inherit" href="#">
-        Henry Match
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {". "}
-      Hecho con <FavoriteIcon fontSize="small" /> por alumnos de Henry
-    </Typography>
-  );
-}
+import Ban from "../../components/Ban";
+import Landing from "../../components/LandingPage";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const userMatch = useSelector(state => state.userMatch)
   const users = useSelector((state) => state.users);
+  const userMatches = useSelector((state) => state.userMatches);
   const userDetail = useSelector((state) => state.userDetail);
 
+  const iAmActive = userDetail?.active;
+
+  let allAdmins = [];
+
+  let filterAdmins = users.filter((user) => {
+    if (user.isAdmin === true) {
+      allAdmins.push(user);
+    }
+  });
+
+  //MODAL PARA CREAR USUARIO
   const [modal, setModal] = useState(false);
+
+  //PARA ABRIR MODAL PREMIUM
+  const [premium, setPremium] = useState(false);
+
+  //IDENTIFICO CUANDO SE CREO UN USUARIO NUEVO
+  const [newUser, setNewUser] = useState(false);
 
   //PARA LLENAR EL STORE CON TODOS LOS USUARIOS
   useEffect(() => {
@@ -68,7 +58,7 @@ const Home = () => {
         photoUrl: user.picture,
         email: user.email || "exampleEmail@gmail.com",
         description: "im Ready to get my first HenryMatch",
-        role: "user",
+        role: "default",
       };
 
       window.localStorage.setItem("currentTalkjsUser", JSON.stringify(userid));
@@ -106,87 +96,38 @@ const Home = () => {
     dispatch(filterByMe());
   }, [userDetail]);
 
+  useEffect(() => {
+    if (user) {
+      dispatch(getUserByNick(user.sub)).then(() =>
+        dispatch(filterUserByMatches(userDetail?._id))
+      );
+    }
+  }, [user, userDetail?._id]);
 
   return (
     <>
-      {/* <ChatRoom
-        usersDetail={userDetail}
-        users={users}
-        /> */}
-
+          <Modal
+            modal={modal}
+            setModal={setModal}
+            setNewUser={setNewUser}
+          ></Modal>
       {isLoading && (
         <>
           <Loader />
         </>
       )}
-
-      <Modal modal={modal} setModal={setModal}></Modal>
-      {isAuthenticated ? (
+      {isAuthenticated && iAmActive === false ? (
+        <>
+          <Ban userDetail={userDetail} users={users} allAdmins={allAdmins} />
+        </>
+      ) : isAuthenticated ? (
         <Grid>
-          <CssBaseline />
           <Header />
-          <Cards />
-          <BottomBar />
+          <Cards setPremium={setPremium} />
+          <BottomBar premium={premium} setPremium={setPremium} />
         </Grid>
       ) : (
-        <>
-          <Grid container component="main" sx={{ height: "100vh" }}>
-            <CssBaseline />
-            <Grid
-              item
-              xs={false}
-              sm={4}
-              md={7}
-              sx={{
-                backgroundImage: `url(${HenryGirl})`,
-                backgroundRepeat: "no-repeat",
-                backgroundColor: (t) =>
-                  t.palette.mode === "light"
-                    ? t.palette.grey[50]
-                    : t.palette.grey[900],
-                backgroundSize: "cover",
-                backgroundPosition: "start",
-              }}
-            />
-
-            <Grid
-              item
-              xs={12}
-              sm={8}
-              md={5}
-              component={Paper}
-              elevation={6}
-              square>
-              <Box
-                sx={{
-                  my: 8,
-                  mx: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}>
-                <Box component="form" noValidate sx={{ mt: 1 }}>
-                  <Typography variant="h4">
-                    Matchea y chateá con Alumnos de Henry!
-                  </Typography>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    sx={{
-                      right: 0,
-                      left: 0,
-                      border: 0,
-                      marginTop: 20,
-                    }}>
-                    <LoginButton />
-                  </Box>
-                  <Copyright sx={{ mt: 30 }} />
-                </Box>
-              </Box>
-            </Grid>
-          </Grid>
-        </>
+        <Landing />
       )}
     </>
   );

@@ -2,7 +2,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 //======IMPORTACIONES DE COMPONENTES
@@ -14,6 +13,7 @@ import {
   filterByGender,
   filterByMe,
 } from "../../Redux/actions/index";
+import setterName from "./helpers.js";
 
 //======ESTILO E IMAGENES
 import Dialog from "@mui/material/Dialog";
@@ -26,20 +26,20 @@ import Swal from "sweetalert2";
 
 //FORMULARIO INICIAL
 const initialForm = {
-  name: "", //*
+  name: "",
   age: "",
-  nickname: "", //*
-  email: "", //REQUERIDO EN DB//*
-  image: "", //REQUERIDO EN DB//*
+  nickname: "",
+  email: "",
+  image: "",
   description: "",
-  gender: "male",
-  genderInt: "both",
+  gender: "",
+  genderInt: "",
   password: null,
   likeGiven: [],
   likeRecieved: [],
 };
 
-const Modal = ({ modal, setModal }) => {
+const Modal = ({ modal, setModal, setNewUser }) => {
   //ESTOS ESTADOS VIENEN DE MUI Y SE PASAN COMO PROPS A Dialog.
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState("sm");
@@ -48,16 +48,17 @@ const Modal = ({ modal, setModal }) => {
   const { user } = useAuth0();
   const dispatch = useDispatch();
   const [userForm, setUserForm] = useState(initialForm);
-  const users = useSelector((state) => state.users);
-
+  //PARA RENDERIZAR ALGUN ERROR DE LA VALIDACION
   const [errors, setErrors] = useState({});
+  //INPUT NAME
+  const [nameInput, setNameInput] = useState("");
 
   useEffect(() => {
     setUserForm({
       ...userForm,
       name: user?.name,
       nickname: user?.sub,
-      email: user?.email, //REQUERIDO EN DB
+      email: user?.email,
       image: user?.picture,
     });
   }, [user]);
@@ -70,32 +71,22 @@ const Modal = ({ modal, setModal }) => {
   //OBTENGO NOMBRE USUARIO PARA CREAR EL USUARIO
   function handleChangeName(e) {
     e.preventDefault();
-    const { name, value } = e.target;
-    const nameInDb = users.find((u) => u.name === value);
-    if (nameInDb) {
-      setErrors({ ...errors, name: "tu nombre debe ser único, como vos" });
-    } else {
-      setUserForm({
-        ...userForm,
-        [name]: value,
-      });
-
-      delete errors.name;
-    }
+    setNameInput(e.target.value);
   }
+
   //OBTENGO  LA EDAD DEL USUARIO
   function handleChangeAge(e) {
     e.preventDefault();
     const { name, value } = e.target;
-    if (value<18) {
-      setErrors({ ...errors, age: "Tenes que ser mayor de edad" });
+    if (value < 18 && value > 90) {
+      setErrors({ ...errors, age: "No tenés edad para estar por aquí" });
     } else {
-    setUserForm({
-      ...userForm,
-      [name]: Number(value),
-    })
-    delete errors.age;
-  };
+      setUserForm({
+        ...userForm,
+        [name]: Number(value),
+      });
+      delete errors.age;
+    }
   }
   //OBTENGO LOS DEMAS DATOS DEL USUARIO PARA CREAR EL USUARIO
   function handleChange(e) {
@@ -110,25 +101,26 @@ const Modal = ({ modal, setModal }) => {
   //CREO UN USUARIO NUEVO
   function handleSubmit(e) {
     e.preventDefault();
-
+    //INGRESO EL NOMBRE EN EL FORM SETEANDOLO, LA PRIMERA LETRA EN MAYUSCULA Y EL RESTO MINUSCULA
+    setUserForm({
+      ...userForm,
+      name: setterName(nameInput),
+    });
+    setNameInput("");
+    //VALIDACIÓN
     const { gender, genderInt, name, age } = userForm;
     if ([gender, genderInt, name, age].includes("")) {
       setErrors({ ...errors, msg: "todos los campos son requeridos" });
       setTimeout(() => {
-        setErrors(
-          errors.name ?  {name: "tu nombre debe ser único, como vos"} :  errors.age ? { age: "Tenes que ser mayor de edad" }  : {}
-        )
+        setErrors(errors.age ? { age: "Tenes que ser mayor de edad" } : {});
       }, 2000);
       return;
     }
     if (Object.keys(errors).length === 0) {
-      //PARA LLENAR userDetail
-     // dispatch(getUserByNick(userForm.nickname));
-      //PARA FILTRAR SEGUN genderInt
-      // dispatch(filterByGender(userForm.genderInt));
-      //AHORA SI CREO UN USUARIO NUEVO
       dispatch(createUser(userForm));
-      dispatch(filterByMe())
+
+      dispatch(filterByMe());
+      //ALERT
       Swal.fire({
         position: "center",
         icon: "success",
@@ -140,6 +132,8 @@ const Modal = ({ modal, setModal }) => {
       setUserForm(initialForm);
       //CIERRO MODAL
       handleClose();
+      //IDENTIFICO NUEVO USUARIO
+      setNewUser(true);
     }
   }
 
@@ -170,7 +164,6 @@ const Modal = ({ modal, setModal }) => {
                 name="name"
                 placeholder="nombre..."
                 onChange={handleChangeName}></input>
-              {errors.name && <p>{errors.name}</p>}
             </div>
 
             {/* LA FECHA DE NACIMIENTO DEL USUARIO */}
@@ -180,9 +173,8 @@ const Modal = ({ modal, setModal }) => {
                 type="number"
                 name="age"
                 onChange={handleChangeAge}></input>
-                {errors.age && <p>{errors.age}</p>}
+              {errors.age && <p>{errors.age}</p>}
             </div>
-
             {/* EL GENERO DEL USUARIO */}
             <div>
               <InputLabel htmlFor="gender">eres (género):</InputLabel>
@@ -202,14 +194,11 @@ const Modal = ({ modal, setModal }) => {
                 <option value="female">mujeres</option>
               </select>
             </div>
-
             {errors.msg && <p>{errors.msg}</p>}
-
             <DialogActions>
               <button type="submit">LISTO, QUE TE DIVIERTAS!</button>
             </DialogActions>
           </form>
-
           <p>En tu perfil podras agregar fotos y más información sobre vos</p>
         </DialogContent>
       </Dialog>

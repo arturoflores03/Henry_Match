@@ -1,7 +1,4 @@
 import * as React from "react";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
 import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -19,6 +16,9 @@ import Favorite from "@mui/icons-material/Favorite";
 import Modal from "@mui/material/Modal";
 import ButtonBases from "../Buttoms/ButtomImg";
 import Carousel from "react-material-ui-carousel";
+
+// import ChatBox from "../ChatBox/Container";
+
 
 const StyledFab = styled(Fab)({
   position: "absolute",
@@ -58,15 +58,9 @@ var items = [
   },
 ];
 
-//STRIPE
-const stripePromise = loadStripe(
-  "pk_test_51LHnyuJ7NqOhO9cbrpQWMKYKfkW09dgZGHXXmjGudts20yyqA4vyDxHz3bufSWmUkTHvtGeIfII2LfR1DJpuumId00oxxCoyhE"
-);
-
-export default function BottomBar() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export default function BottomBar({ premium, setPremium }) {
+  const handleOpen = () => setPremium(true);
+  const handleClose = () => setPremium(false);
 
   const [index, setIndex] = React.useState(0);
   const handleChange = (cur: number, prev: number) => {
@@ -76,12 +70,12 @@ export default function BottomBar() {
 
   return (
     <Box>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={premium} onClose={handleClose}>
         <Box sx={style}>
           <ButtonBases />
           <Carousel
             index={index}
-         /*    onChange={handleChange} */
+            /*    onChange={handleChange} */
             interval={4500}
             animation="slide"
             indicators={false}
@@ -97,7 +91,7 @@ export default function BottomBar() {
               letterSpacing: 2,
               wordSpacing: 2,
               color: "#fff",
-            /*   fontWeight: "normal", */
+              /*   fontWeight: "normal", */
               textDecoration: "none",
               fontStyle: "normal",
               fontVariant: "normal",
@@ -115,15 +109,20 @@ export default function BottomBar() {
         <Toolbar>
           <Tooltip title="PREMIUM">
             <StyledFab
-              color="info"
+              color="primary"
               aria-label="add"
-              sx={{ width: 80, height: 80 }}
+              sx={{ width: 60, height: 60 }}
               onClick={handleOpen}>
-              <DiamondIcon fontSize="large" />
+              <DiamondIcon
+                sx={{
+                  color: "dark.main",
+                  "&:hover": { color: "primary.main" },
+                }}
+                fontSize="large"
+              />
             </StyledFab>
           </Tooltip>
           <Box sx={{ flexGrow: 1 }} />
-
           <Typography variant="body2" color="text.secondary">
             <Link color="inherit" href="#">
               Henry Match

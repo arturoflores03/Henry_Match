@@ -5,7 +5,7 @@ import { theme } from "../../theme"
 
 export const MsgContainer = styled(Box)(({ theme }) => ({
     [theme.breakpoints.up("md")]: {
-      padding: "450px 0px 40px 0px",
+      padding: "450px 0px 20px 0px",
     },
     display: "flex",
     justifyContent: "center",
@@ -18,7 +18,7 @@ export const MsgContainer = styled(Box)(({ theme }) => ({
 export const MsgText = styled(Typography)(({ theme }) => ({
   //fontFamily: ,
  [theme.breakpoints.up("md")]: {
-   fontSize: "2.2rem",
+   fontSize: "1.35rem",
  },
  
  fontSize: "1rem",

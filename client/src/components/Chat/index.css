@@ -65,6 +65,7 @@
     width: 55%;
     margin: 0 auto;
     justify-content: space-around;
+    padding-top: 80px;
   }
   .users-container {
     background-color: #ffffff;
@@ -162,16 +163,10 @@
   .chatbox-container {
     position: absolute;
     bottom: 0;
-    height: 400px;
+    height: 470px;
     right: 5%;
     width: 300px;
-  }
-  .inbox-container {
-    position: absolute;
-    bottom: 0;
-    height: 400px;
-    right: 5%;
-    width: 300px;
+    padding-bottom: 65px;
   }
 
   

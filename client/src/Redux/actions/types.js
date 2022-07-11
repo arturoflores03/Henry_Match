@@ -4,6 +4,7 @@
 export const GET_USERS = "GET_USERS";
 
 export const GET_USER_BY_NICKNAME = "GET_USER_BY_NICKNAME";
+export const GET_USER_BY_DETAIL = "GET_USER_BY_DETAIL";
 //DONE
 
 export const GET_USER_LIKES = "GET_USER_LIKES";
@@ -11,7 +12,8 @@ export const GET_USER_LIKES = "GET_USER_LIKES";
 
 export const GET_USER_MATCHES = "GET_USER_MATCHES";
 //PRIORIDAD ALTA
-
+export const GET_USER_ID = "GET_USER_ID";
+//DONE
 export const FILTER_USERS_BY_MATCHES = "FILTER_USERS_BY_MATCHES";
 
 export const UPDATE_MATCH = "UPDATE_MATCH";
@@ -58,7 +60,9 @@ const initialState = {
 //-----STATES------//
 //
 export const CLEAR_USER_DETAIL = "CLEAR_USER_DETAIL";
+export const CLEAR_USER_DETAIL_MATCHES = "CLEAR_USER_DETAIL_MATCHES";
 
 //CLEAR_MESSAGE
 
 export const RENDER_ADMIN = "RENDER_ADMIN";
+export const RENDER_SIDE_BAR = "RENDER_SIDE_BAR";

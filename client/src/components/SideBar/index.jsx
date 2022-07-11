@@ -13,13 +13,22 @@ import Chat from "./Chat";
 import EditIcon from "@mui/icons-material/Edit";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Avatar, Chip, IconButton, Tooltip } from "@mui/material";
+import { Avatar, Chip, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import MyNetwork from "../Chat/MyNetwork";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import DisplayLikeReceived from "./LikeReceived";
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import ChatIcon from "@mui/icons-material/Chat";
+import { renderSideBar } from "../../Redux/actions";
+import { Invitation } from "../Reviews/Invitation";
 
-export default function SideBar() {
+export default function SideBar({ setPremium }) {
+  const dispatch = useDispatch();
   const [state, setState] = React.useState({
     left: false,
   });
@@ -27,11 +36,16 @@ export default function SideBar() {
     left: true,
   });
 
-  const userDetail = useSelector((state) => state.userDetail);
+  const render = useSelector((state) => state.renderSideBar);
   const users = useSelector((state) => state.users);
 
-  const handleNav = () => {
-    setNav(nav);
+  const handleChat = () => {
+    dispatch(renderSideBar("chat"));
+    console.log(render);
+  };
+  const handleMatches = () => {
+    dispatch(renderSideBar("matches"));
+    console.log(render);
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -52,34 +66,32 @@ export default function SideBar() {
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
       // onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+      onKeyDown={toggleDrawer(anchor, false)}>
       <List>
         {[""].map((text, index) => (
-          <ListItem key={text}>
-            <ListItemButton>
+          <>
+            <ListItem key={text}>
               <NavLink to="/profile">
                 <ListItemIcon>
                   {index % 2 === 0 ? (
                     <Box
                       sx={{
-                        transform: "translate(30%)",
-                      }}
-                    >
+                        paddingLeft: 8,
+                        paddingBottom: 2,
+                      }}>
                       <Tooltip title="Mi Perfil">
                         <IconButton>
                           <Avatar
                             src={user.picture}
                             alt={user.name}
-                            sx={{ width: 56, height: 56 }}
-                          ></Avatar>
+                            sx={{ width: 76, height: 76 }}></Avatar>
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Editar Perfil">
-                        <IconButton>
-                          <EditIcon color="light" />
-                        </IconButton>
-                      </Tooltip>
+                      {/* <Tooltip title="Editar Perfil">
+                          <IconButton>
+                            <EditIcon color="light" />
+                          </IconButton>
+                        </Tooltip> */}
                     </Box>
                   ) : (
                     <NavLink to="/desktop"></NavLink>
@@ -87,44 +99,88 @@ export default function SideBar() {
                 </ListItemIcon>
               </NavLink>
               <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+            </ListItem>
+            <Divider sx={{ bgcolor: "white" }} />
+          </>
         ))}
+
+        <Box
+          sx={{
+            paddingTop: 2,
+            paddingLeft: 9,
+            // transform: "translate(25%)",
+          }}>
+          <Tooltip placement="top" arrow title="Ve quien te dio LIKE">
+            <IconButton onClick={handleChat} size="large" color="info">
+              <VolunteerActivismIcon />
+            </IconButton>
+          </Tooltip>
+          <Box
+            sx={{
+              // paddingTop: 2,
+              paddingLeft: "15px",
+              display: "inline-block",
+              // transform: "translate(25%)",
+            }}>
+            <Tooltip placement="top" arrow title="Chatea con tus matches">
+              <IconButton
+                onClick={handleMatches}
+                size="large"
+                sx={{ color: "white" }}>
+                <ChatIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
       </List>
 
-      <Divider
-        sx={{
-          "&::before, &::after": {
-            borderColor: "light.main",
-          },
-        }}
-      >
-        {" "}
-        <NavLink to="/matches">
-          <Chip
-            label="MATCHES"
+      {render === "matches" ? (
+        <>
+          <Divider
             sx={{
-              color: "secondary.main",
-              fontWeight: 700,
-              cursor: "pointer",
-              textDecoration: "none",
-            }}
-          />
-        </NavLink>
-        <NavLink to="/chatroom">
-          <Chip
-            label="CHAT"
+              "&::before, &::after": {
+                borderColor: "light.main",
+              },
+            }}>
+            {" "}
+            <Chip
+              label="CHAT"
+              sx={{
+                color: "light.main",
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            />
+          </Divider>
+          <Chat />
+        </>
+      ) : (
+        <>
+          <Divider
             sx={{
-              color: "light.main",
-              fontWeight: 700,
-              cursor: "pointer",
-              textDecoration: "none",
-            }}
-          />
-        </NavLink>
-      </Divider>
-      <Chat />
+              "&::before, &::after": {
+                borderColor: "light.main",
+              },
+            }}>
+            {" "}
+            <Chip
+              label="LIKES RECIBIDOS"
+              sx={{
+                color: "light.main",
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            />
+          </Divider>
+          <DisplayLikeReceived />
+        </>
+      )}
+
       {/* <MyNetwork usersDetail={userDetail} users={users} /> */}
+      <Divider
+        sx={{ bgcolor: "white", position: "relative", verticalAlign: "bottom" }}
+      />
+      <Invitation />
     </Box>
   );
 
@@ -138,8 +194,7 @@ export default function SideBar() {
           <Drawer
             anchor={anchor}
             open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
+            onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </Drawer>
         </React.Fragment>

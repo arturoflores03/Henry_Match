@@ -1,36 +1,45 @@
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Collapse,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import React, { Component } from "react";
-import { dummyUsers } from "./Users";
+import { Link } from "react-router-dom";
 import Talk from "talkjs";
-import { connect } from "react-redux";
-import "./index.css";
+// import "./index.css";
+import SendIcon from "@mui/icons-material/Send";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import InfoIcon from "@mui/icons-material/Info";
 
 class MyNetwork extends Component {
   constructor(props) {
     super(props);
 
-     var currentUser;
-    // const currentTalkjsUser = localStorage.getItem("currentTalkjsUser");
+    var currentUser;
 
-    // if (currentTalkjsUser) {
-    //   currentUser = JSON.parse(currentTalkjsUser);
-    // }
-    // const {userDetail} = this.props;
-    // if(userDetail){
-    //   currentUser = userDetail
-    // }
-  
     this.state = {
       currentUser,
     };
-  
   }
-
+ 
   handleClick(userId) {
     const { userDetail } = this.props;
     const { userMatches } = this.props;
+
     /* Retrieve the two users that will participate in the conversation */
-    
-    let currUser = {...userDetail, id: userDetail.nickname}
+
+    let currUser = { ...userDetail, id: userDetail.nickname };
 
     const user = userMatches.find((user) => user._id === userId);
     const userFinal = { ...user, id: user.nickname };
@@ -62,80 +71,99 @@ class MyNetwork extends Component {
         /* Create and mount chatbox in container */
         this.chatbox = window.talkSession.createChatbox(conversation);
         this.chatbox.mount(this.container);
+
+        talkSession.unreads.onChange(function (conversationIds) {
+          var unreadCount = `${conversationIds.length}`;
+          document.getElementById("unread-message-count").innerHTML =
+            unreadCount;
+          console.log("Conversation ID's", conversationIds);
+        });
       })
       .catch((e) => console.error(e));
-    
-//############################ NOTIFICATION FUNCTION START ########################
-      // window.talkSession.unreads.on("change", function (conversationIds) {
-      //   var amountOfUnreads = conversationIds.length;
-      
-      //   // update the text and hide the badge if there are
-      //   // no unreads.
-      //   $("#notifier-badge")
-      //     .text(amountOfUnreads)
-      //     .toggle(amountOfUnreads > 0);
-      
-      //   // update the tab title so users can easily see that they have
-      //   // messages waiting
-      //   if (amountOfUnreads > 0) {
-      //     document.title = "(" + amountOfUnreads + ") MySite";
-      //   } else {
-      //     document.title = "MySite";
-      //   }
-      // });
-//#################################### END ######################################
-}
+  }
 
   render() {
     const { userDetail } = this.props;
-    let currUser = {...userDetail, id: userDetail.nickname}
+    let currUser = { ...userDetail, id: userDetail?.nickname };
     const { userMatches } = this.props;
 
     return (
-      <div className="users">
-        <div className="current-user-container">
-          {currUser && (
-            <div>
-              <picture className="current-user-picture">
-                <img alt={currUser.name} src={currUser.image} />
-              </picture>
-              <div className="current-user-info">
-                <h3>{currUser.name}</h3>
-                <p>{currUser.description}</p>
-              </div>
-            </div>
-          )}
-        </div>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{
+            right: 0,
+            left: 0,
+            marginTop: 10,
+          }}
+        >
+          {userMatches.map((user) => (
+            <>
+              <Card
+                sx={{
+                  width: 225,
+                  marginBottom: 14,
+                  borderColor: "none",
+                  borderRadius: 3,
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="266"
+                  style={{ backgroundImage: "url(" + user.image + ")" }}
+                  alt=""
+                  sx={{ borderColor: "#000" }}
+                />
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  sx={{ textAlign: "center" }}
+                >
+                  <CardActions
+                    disableSpacing
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{ bgcolor: "inherit" }}
+                  >
+                    <IconButton color="light" size="large">
+                      <Link to={"/users/"+ user.nickname}>
+                        <InfoIcon />
+                      </Link>
+                    </IconButton>
+                    <Typography
+                      sx={{
+                        fontSize: 23,
+                        fontWeight: 900,
+                        // letterSpacing: 1,
+                        fontFamily: "Proxima Nova",
+                      }}
+                    >
+                      {user.name}{" "}
+                    </Typography>
+                    <IconButton
+                      onClick={() => this.handleClick(user._id)}
+                      color="primary"
+                      size="large"
+                    >
+                      <SendIcon />
+                    </IconButton>
+                  </CardActions>
+                </Box>
+              </Card>
+              <Divider variant="inset" component="li" />
+            </>
+          ))}
+        </Box>
 
-        <div className="users-container">
-          <ul>
-            {userMatches.map((user) => (
-              <li key={user._id} className="user">
-                <picture className="user-picture">
-                  <img src={user.image} alt={`${user.name}`} />
-                </picture>
-                <div className="user-info-container">
-                  <div className="user-info">
-                    <h4>{user.name}</h4>
-                    {/* <p>{user.info}</p> */}
-                  </div>
-                  <div className="user-action">
-                    <button onClick={() => this.handleClick(user._id)}>
-                      Message
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          <div className="chatbox-container" ref={(c) => (this.container = c)}>
-            <div id="talkjs-container" style={{ height: "600px" }}>
-              <i></i>
-            </div>
+        <div className="chatbox-container" ref={(c) => (this.container = c)}>
+          <div id="talkjs-container" style={{ height: "600px" }}>
+            <i></i>
           </div>
         </div>
-      </div>
+      </Box>
     );
   }
 }

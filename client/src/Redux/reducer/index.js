@@ -10,6 +10,9 @@ import {
   UPDATE_IMG,
   FILTER_USERS_BY_MATCHES,
   RENDER_ADMIN,
+  RENDER_SIDE_BAR,
+  GET_USER_BY_DETAIL,
+  CLEAR_USER_DETAIL_MATCHES,
   /*  GET_USER_BY_GENDER,
   GET_USER_BY_GENDERINT, */
 } from "../actions/types.js";
@@ -20,11 +23,13 @@ const initialState = {
   usersSelected: [], //ESTE LO USO PARA ALMACENAR EL RESULTADO DE FILTERS & SORTERS
   userDetail: [], //USADO TAMBIEN PARA CLEAR_USER_DETAIL
   userMatches: [],
+  userDetailMatches:[],
   // OPCIONALES?
   // message: [], //POR EJ:AQUI  GUARDE LA RESPUESTA DEL SERVIDOR DESPUES DEL POST Y EL PUT
   gender: [],
   genderInt: [],
-  admin: "users",
+  renderAdmin: "users",
+  renderSideBar: "matches",
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -38,6 +43,9 @@ export default function rootReducer(state = initialState, action) {
     }
     case GET_USER_BY_NICKNAME: {
       return { ...state, userDetail: action.payload };
+    }
+    case GET_USER_BY_DETAIL: {
+      return { ...state, userDetailMatches: action.payload };
     }
 
     case CREATE_USER: {
@@ -79,19 +87,24 @@ export default function rootReducer(state = initialState, action) {
           : myGenderInt === "female"
           ? allMyUsers.filter((e) => e.gender === "female")
           : allMyUsers;
-
-      const filterAddLikeReceived = filterByGender.filter(
+      const filterIsAdmi = filterByGender.filter((e) => !e.isAdmin);
+      console.log("filterIsAdmi",filterIsAdmi)
+      const filterUserInac = filterIsAdmi.filter((e) => e.active);
+      
+      //console.log("filterUserInac",filterUserInac)
+      const filterAddLikeReceived = filterUserInac.filter(
         (e) => !e.likeReceived.includes(myID)
       );
       const filterAddDisLikeReceived = filterAddLikeReceived.filter(
         (e) => !e.dislikeReceived.includes(myID)
       );
+
       const hiddenUser = filterAddDisLikeReceived.filter((e) => e._id !== myID);
       const FinalFiltered = new Set(hiddenUser);
 
       const finalArrayFiltered = [...FinalFiltered];
 
-      console.log("finalArrayFilt ", finalArrayFiltered);
+      //console.log("finalArrayFilt ", finalArrayFiltered);
 
       return {
         ...state,
@@ -105,11 +118,23 @@ export default function rootReducer(state = initialState, action) {
         userDetail: [],
       };
     }
+    case CLEAR_USER_DETAIL_MATCHES: {
+      return {
+        ...state,
+        userDetailMatches: [],
+      };
+    }
 
     case RENDER_ADMIN: {
       return {
         ...state,
-        admin: action.payload,
+        renderAdmin: action.payload,
+      };
+    }
+    case RENDER_SIDE_BAR: {
+      return {
+        ...state,
+        renderSideBar: action.payload,
       };
     }
 

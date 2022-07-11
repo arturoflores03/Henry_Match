@@ -10,6 +10,10 @@ import {
   UPDATE_IMG,
   FILTER_USERS_BY_MATCHES,
   RENDER_ADMIN,
+  RENDER_SIDE_BAR,
+  GET_USER_ID,
+  GET_USER_BY_DETAIL,
+  CLEAR_USER_DETAIL_MATCHES,
   /*  GET_USER_BY_GENDERINT, */
   // FILTER_BY_PREFERENCE,
   // FILTER_BY_INTEREST,
@@ -51,6 +55,19 @@ export function getUserByNick(nickname) {
     }
   };
 }
+export function getUserByDetail(nickname) {
+  return async function (dispatch) {
+    try {
+      const user = await axios.get(url + `/${nickname}`);
+      return dispatch({
+        type: GET_USER_BY_DETAIL,
+        payload: user.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
 
 //RUTA QUE ESTAS USANDO "https://henrymatch-pg.herokuapp.com/users";
 export function createUser(data) {
@@ -74,7 +91,7 @@ export function updateUser(id, data) {
         `https://henrymatch-pg.herokuapp.com/usersID/${id}`,
         data
       );
-     
+
       return dispatch({
         type: UPDATE_USER,
         payload: user.data,
@@ -163,6 +180,12 @@ export function clearUserDetail(payload) {
     payload: payload,
   };
 }
+export function clearUserDetailMatches(payload) {
+  return {
+    type: CLEAR_USER_DETAIL_MATCHES,
+    payload: payload,
+  };
+}
 
 export function renderAdmin(payload) {
   return {
@@ -170,6 +193,14 @@ export function renderAdmin(payload) {
     payload: payload,
   };
 }
+
+export function renderSideBar(payload) {
+  return {
+    type: RENDER_SIDE_BAR,
+    payload: payload,
+  };
+}
+
 
 //FUNCION PARA CLEAR_MESSAGE
 

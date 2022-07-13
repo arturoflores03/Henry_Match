@@ -30,7 +30,8 @@ const Invitation2 = ({ userDetail }) => {
         justifyContent: "space-between",
         display: "flex",
         width: "100%",
-      }}>
+      }}
+    >
       <CardMedia
         component="img"
         sx={{ width: 150 }}
@@ -43,9 +44,10 @@ const Invitation2 = ({ userDetail }) => {
           flexDirection: "column",
           textAlign: "center",
           /* alignItems: "center", */
-        }}>
+        }}
+      >
         <CardContent>
-          {userDetail.reviews === "" ? (
+          {userDetail?.reviews === "" ? (
             <Box>
               <Typography component="div" variant="h6">
                 REVIEWS
@@ -53,8 +55,13 @@ const Invitation2 = ({ userDetail }) => {
               <Typography
                 variant="subtitle1"
                 color="text.secondary"
-                component="div">
-                Comparte con los demás tu experiencia!
+                component="div"
+              >
+                {userDetail.review === ""
+                  ? userDetail.premium === false
+                    ? "Hacete premium y disfruta features extra!"
+                    : "Comparte con los demás tu experiencia en HM!"
+                  : "Gracias por formar parte de esta hermosa comunidad!"}
               </Typography>
             </Box>
           ) : (
@@ -65,7 +72,8 @@ const Invitation2 = ({ userDetail }) => {
               <Typography
                 variant="subtitle1"
                 color="text.secondary"
-                component="div">
+                component="div"
+              >
                 Haceté PREMIUM y disfrutá de todos los beneficios de la
                 comunidad HM!
               </Typography>

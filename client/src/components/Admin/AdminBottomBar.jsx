@@ -1,14 +1,17 @@
+//======PAQUETES Y LIBRERIAS
 import * as React from "react";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { NavLink } from "react-router-dom";
+//======IMPORTACIONES DE COMPONENTES
 
-import { styled } from "@mui/material/styles";
+//======IMPORTACIONES DE FUNCIONES NUESTRAS
+
+//======ESTILO E IMAGENES
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import Fab from "@mui/material/Fab";
-import { Link, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Favorite from "@mui/icons-material/Favorite";
 
 export default function AdminBottomBar() {
@@ -20,15 +23,27 @@ export default function AdminBottomBar() {
         <Toolbar>
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="body2" color="text.secondary">
-            <Link color="inherit" href="#">
+            <NavLink
+              to="/terms"
+              style={{
+                color: "white",
+              }}
+              target="_blank"
+              rel="noopener noreferrer">
               Henry Match
-            </Link>{" "}
+            </NavLink>{" "}
             {new Date().getFullYear()}
             {". "}
             Hecho con <Favorite fontSize="small" color="primary" /> por{" "}
-            <Link color="inherit" href="#">
+            <NavLink
+              to="/matchteam"
+              style={{
+                color: "white",
+              }}
+              target="_blank"
+              rel="noopener noreferrer">
               alumnos
-            </Link>{" "}
+            </NavLink>{" "}
             de Henry
           </Typography>
         </Toolbar>

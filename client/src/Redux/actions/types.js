@@ -42,6 +42,7 @@ export const CREATE_USER = "CREATE_USER";
 
 export const UPDATE_USER = "PUT_USER";
 export const UPDATE_IMG = "UPDATE_IMG";
+
 //PRIORIDAD ALTA
 
 /* 

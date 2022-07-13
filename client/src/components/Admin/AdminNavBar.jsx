@@ -21,8 +21,9 @@ import {
 } from "@mui/material";
 import Loader from "../Loader/Loader";
 import AdminSideBar from "./AdminSideBar";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
-const AdminNavBar = () => {
+const AdminNavBar = ({ setRender }) => {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
   const userDetail = useSelector((state) => state.userDetail);
 
@@ -43,18 +44,28 @@ const AdminNavBar = () => {
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="fixed" color="inherit">
             <Toolbar>
-              <AdminSideBar />
+              <AdminSideBar setRender={setRender} />
               {/* DESKTOP */}
               <Box sx={{ flexGrow: 1 }} />
               <Typography variant="h3">Panel del Administrador</Typography>
               <Box sx={{ flexGrow: 1 }} />
-
+              <Tooltip title="MATCHEA">
+                <NavLink to={"/home"}>
+                  <IconButton size="large" aria-label="show 4 new mails">
+                    <LocalFireDepartmentIcon
+                      fontSize="large"
+                      sx={{ color: "primary.main" }}
+                    />
+                  </IconButton>
+                </NavLink>
+                {/* MATCHS */}
+              </Tooltip>
               {/* PROFILE */}
               <Box sx={{ display: { xs: "flex", md: 900 } }}>
                 <Tooltip title={`${user.name.substring(0, 1)} perfil`}>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      src={userDetail?.picture}
+                      src={userDetail?.image}
                       alt={user.name.substring(0, 1)}
                     />
                   </IconButton>

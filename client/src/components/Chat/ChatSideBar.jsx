@@ -83,10 +83,10 @@ export default function ChatSideBar({ setRender }) {
                 </IconButton>
               </ListItemIcon>
             </ListItemIcon>
-
             <ListItemText primary="Contactos" />
           </ListItemButton>
         </ListItem>
+
         <ListItem>
           <ListItemButton onClick={handleInbox}>
             <ListItemIcon>

@@ -56,15 +56,18 @@ const ChatRoom = () => {
       ) : isAuthenticated && iAmActive === true ? (
         <>
           <Box
-          // sx={{
-          //   display: { md: "flex" },
-          // }}
-          >
+            sx={{
+              display: { md: "flex" },
+            }}>
             <Chat
               userDetail={userDetail}
               users={users}
               userMatches={userMatches}
             />
+            <Box sx={{ mt: 10, maxWidth: 600, width: { md: "100%" } }}>
+              <ReviewCarouselHM users={users} />
+              <Invitation2 userDetail={userDetail} />{" "}
+            </Box>
           </Box>
         </>
       ) : (

@@ -94,18 +94,13 @@ const CarouselHM = ({ users }) => {
     <Box
       sx={{
         textAlign: "center",
-      }}>
-      <Typography
-        variant="h4"
-        sx={{
-          pt: 1,
-        }}>
-        NUESTROS USUARIOS
-      </Typography>
+      }}
+    >
       <Paper
         sx={{
           textAlign: "center",
-        }}>
+        }}
+      >
         {/* <Modal open={open} onClose={handleClose}> AQUI PUEDE IR EL MODAL SI ES NECESARIO*/}
         <Box /* sx={{ mt: 10 }} //AFECTA LA UBICACION*/>
           <Carousel
@@ -148,7 +143,8 @@ const CarouselHM = ({ users }) => {
             fontStyle: "normal",
             fontVariant: "normal",
             textTransform: "none", */
-            }}>
+            }}
+          >
             {users.map((user) => (
               <NavLink to="/">
                 <ImageButton
@@ -175,7 +171,8 @@ const CarouselHM = ({ users }) => {
                           "&:hover": {
                             color: "#474747",
                           },
-                        }}>
+                        }}
+                      >
                         {`                      ${user.name}: ${
                           user.review ? user.review : user.description
                         } `}

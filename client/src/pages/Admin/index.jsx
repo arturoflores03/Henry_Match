@@ -22,13 +22,15 @@ import AdminBottomBar from "../../components/Admin/AdminBottomBar";
 import AdminUsers from "../../components/Admin/AdminUsers";
 import AdminUsers2 from "../../components/Admin/Users/Users";
 import { NavLink } from "react-router-dom";
+import PerfilChat from "../../components/Chat/PerfilChat";
+import { Box } from "@mui/system";
 
 //PABLO CUANDO PUEDAS CONTAME DE ESTA FUNCION <`*.*´> (ZAYRA)
 
 const Admin = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const render = useSelector((state) => state.renderAdmin);
+  const [render, setRender] = useState("users");
   const userDetail = useSelector((state) => state.userDetail);
 
   const iAmAdmin = userDetail?.isAdmin;
@@ -60,20 +62,22 @@ const Admin = () => {
         <Grid>
           {/* {isLoading && <Loader />} */}
           <CssBaseline />
-          <AdminNavBar />
-          {render === "users" ? (
-            <AdminUsers2 />
-          ) : (
-            <Typography variant="h1" sx={{ top: 200 }}>
-              Algo salio mal
-            </Typography>
+          <AdminNavBar setRender={setRender} />
+          {render === "users" && <AdminUsers2 />}
+          {render === "inbox" && (
+            <Box sx={{ paddingTop: 10 }}>
+              <PerfilChat />
+            </Box>
+          )}
+          {render === "statistics" && (
+            <Box sx={{ paddingTop: 10 }}>Aqui estaran las estadisticas xD</Box>
           )}
           <AdminBottomBar />
         </Grid>
       ) : (
         <>
           <Typography variant="h1" color="red">
-            NO ERES ADMIN! pica de aca
+            NO SOS ADMIN! Rajá de aca atrevido jajaj
           </Typography>
 
           <Button href="/" color="info">

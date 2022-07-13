@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import PeopleIcon from "@mui/icons-material/People";
+import ReviewField from "../Reviews/ReviewField";
 
 export default function ProfSideBar({ setRender }) {
   const [state, setState] = React.useState({
@@ -47,59 +48,8 @@ export default function ProfSideBar({ setRender }) {
   };
 
   const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
-      role="presentation"
-      // onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        <Divider
-          sx={{
-            "&::before, &::after": {
-              borderColor: "light.main",
-            },
-          }}
-        >
-          <NavLink to="/chatroom">
-            <Chip
-              label="CHAT"
-              sx={{
-                color: "light.main",
-                fontWeight: 700,
-                cursor: "pointer",
-                textDecoration: "none",
-              }}
-            />
-          </NavLink>
-        </Divider>
-
-        <ListItem>
-          <ListItemButton onClick={handleContactos}>
-            <ListItemIcon>
-              <ListItemIcon>
-                <IconButton onClick={handleContactos}>
-                  <PeopleIcon sx={{ color: "white" }} />
-                </IconButton>
-              </ListItemIcon>
-            </ListItemIcon>
-
-            <ListItemText primary="Contactos" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton onClick={handleInbox}>
-            <ListItemIcon>
-              <ListItemIcon>
-                <IconButton onClick={handleInbox}>
-                  <InboxIcon sx={{ color: "white" }} />
-                </IconButton>
-              </ListItemIcon>
-            </ListItemIcon>
-            <ListItemText primary="Inbox" />
-          </ListItemButton>
-        </ListItem>
-      </List>
+    <Box>
+      <ReviewField />
     </Box>
   );
 

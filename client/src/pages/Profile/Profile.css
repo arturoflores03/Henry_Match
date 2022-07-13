@@ -1,105 +1,105 @@
 body {
-    background: #E8E8E8;
-    font-family: 'Open Sans', sans-serif;
+  background: #E8E8E8;
+  font-family: 'Open Sans', sans-serif;
 }
 
 
 .todojunto {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    min-width: 500px;
-    margin-top: 0px;
-    background: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  min-width: 500px;
+  margin-top: 0px;
+  background: #f94242;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .informaciondelusuario {
-    padding-left: 5px;
-    padding-right: 20px;
-    min-width: 500px;
-    margin-top: 50px;
-    background: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding-left: 5px;
+  padding-right: 20px;
+  min-width: 500px;
+  margin-top: 50px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .datosacompletar {
-    padding-left: 20px;
-    min-width: 500px;
-    margin-top: 50px;
-    background: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding-left: 20px;
+  min-width: 500px;
+  margin-top: 50px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .imagenperfil {
-    width: 250px;
+  width: 250px;
 
 }
 
 .imagenescargadas {
-    width: 40px;
-    height: 40px;
-    padding: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
 }
 
 .alert {
-    color: red;
-    font-weight: bold;
+  color: red;
+  font-weight: bold;
 }
 
 
 .returnHomeButton {
 
-    background: #0085FF;
-    font-weight: 500;
-    font-family: 'Open Sans', sans-serif;
-    border: none;
-    cursor: pointer;
-    width: 28%;
-    padding: 10px;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 15px;
-    transition: .3s ease all;
-    margin-bottom: 10px;
-    margin-left: 150px;
+  background: #0085FF;
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  border: none;
+  cursor: pointer;
+  width: 28%;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 15px;
+  transition: .3s ease all;
+  margin-bottom: 10px;
+  margin-left: 150px;
 }
 
-.label{
-    display: block;
-	font-weight: 600;
-	font-size: 14px;
-	margin-bottom: 5px;
-	color: #1f1f1f;
-    margin: 15px;
+.label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #1f1f1f;
+  margin: 15px;
 }
 
-.actualizar{
-    font-family: 'Open Sans', sans-serif;
-    font-size: 30px;
-    color: #0085FF;
+.actualizar {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 30px;
+  color: #0085FF;
 }
 
-.eliminar{
-    background: red;
-    font-weight: 500;
-    font-family: 'Open Sans', sans-serif;
-    border: none;
-    cursor: pointer;
-    width: 28%;
-    padding: 10px;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 15px;
-    transition: .3s ease all;
-    margin-bottom: 10px;
-    margin-left: 150px;
+.eliminar {
+  background: red;
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  border: none;
+  cursor: pointer;
+  width: 28%;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 15px;
+  transition: .3s ease all;
+  margin-bottom: 10px;
+  margin-left: 150px;
 
 
 }

@@ -1,5 +1,9 @@
 # Henry_Match
 
+===>RUTAS<===
+https://henrymatch-pg.herokuapp.com/users
+https://henrymatch-pg.herokuapp.com/users/nickname
+
 ===>MEMBRETES<===
 
 //======PAQUETES Y LIBRERIAS

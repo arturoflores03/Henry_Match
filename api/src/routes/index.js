@@ -1,11 +1,16 @@
 const express = require("express");
+//const cors = require("cors");
 const router = express.Router();
 //STRIPE
 const Stripe = require("stripe");
 require("dotenv").config();
 const { API_STRIPE } = process.env;
 const stripe = new Stripe(API_STRIPE);
-
+/* app.use(
+  cors({
+    origin: ["http://localhost:9000", "https://checkout.stripe.com"],
+  })
+); */
 const { userDelete } = require("../controllers/userDelete");
 const { userGet } = require("../controllers/userGet");
 const { userPost } = require("../controllers/userPost");
@@ -46,7 +51,7 @@ router.post("/subscription", async (req, res) => {
       //transfer_group: "SUBSCRIPTIONS",
       confirm: true,
     });
-    return res.status(200).send({ message: "ok" });
+    return res.status(200).send({ message: "ok" }); //.json({ url: payment.url })
   } catch (e) {
     res.json({ message: e.raw.message });
   }

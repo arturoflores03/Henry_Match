@@ -1,6 +1,6 @@
 //======PAQUETES Y LIBRERIAS
 import { React, useState, useEffect, Fragment } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Elements,
@@ -15,7 +15,7 @@ import axios from "axios";
 import Loader from "../../components/Loader/Loader";
 
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
-
+import { updateUser } from "../../Redux/actions/index";
 //======ESTILO E IMAGENES
 import userImgs from "./userImgs";
 import "./Subscription.css";
@@ -38,6 +38,7 @@ const stripePromise = loadStripe(
 //ESTE COMPONENTE VA DENTRO DE CHECKOUTFORM
 const Form = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
   const userDetail = useSelector((state) => state.userDetail);
   const [isLoading, setIsLoading] = useState(false);
@@ -85,6 +86,12 @@ created: 1657295934, type: "card" } */
           });
         //MENSAJE DEL SERVIDOR
         const response = data?.message;
+        /* console.log(userDetail, 'USERDETAIL') */
+        if (response === "ok") {
+          dispatch(updateUser(userDetail._id, { premium: true }));
+       /*    axios.post(`https://henrymatch-pg.herokuapp.com/send-mail-premium`, { name, email }) */
+        }
+
         setIsLoading(false);
         //ALERT
         Swal.fire({
@@ -96,9 +103,18 @@ created: 1657295934, type: "card" } */
           timer: 2800,
         });
         elements.getElement(CardElement).clear();
-        navigate("/", { replace: true });
+        navigate("/home", { replace: true });
       } catch (e) {
-        console.log(e);
+        setIsLoading(false);
+        //ALERT
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: e.message,
+          showConfirmButton: false,
+          timer: 2800,
+        });
+        elements.getElement(CardElement).clear();
       }
     }
   };
@@ -191,7 +207,7 @@ created: 1657295934, type: "card" } */
               </button>
             </div>
           </form>
-          <NavLink className="link" to="/">
+          <NavLink className="link" to="/home">
             <h3>
               volver a <span>HOME</span>
             </h3>

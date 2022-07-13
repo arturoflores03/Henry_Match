@@ -19,8 +19,9 @@ import { useSelector } from "react-redux";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import PeopleIcon from "@mui/icons-material/People";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 
-export default function AdminSideBar() {
+export default function AdminSideBar({ setRender }) {
   const [state, setState] = React.useState({
     left: false,
   });
@@ -28,11 +29,14 @@ export default function AdminSideBar() {
     left: true,
   });
 
-  const userDetail = useSelector((state) => state.userDetail);
-  const users = useSelector((state) => state.users);
-
-  const handleNav = () => {
-    setNav(nav);
+  const handleUsers = () => {
+    setRender("users");
+  };
+  const handleInbox = () => {
+    setRender("inbox");
+  };
+  const handleStatistics = () => {
+    setRender("statistics");
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -51,55 +55,86 @@ export default function AdminSideBar() {
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
       // onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}>
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
       <List>
         <Divider
           sx={{
             "&::before, &::after": {
               borderColor: "light.main",
             },
-          }}>
-          <NavLink to="/chatroom">
-            <Chip
-              label="ADMIN"
-              sx={{
-                color: "light.main",
-                fontWeight: 700,
-                cursor: "pointer",
-                textDecoration: "none",
-              }}
-            />
-          </NavLink>
+          }}
+        >
+          <Chip
+            label="ADMIN"
+            sx={{
+              color: "light.main",
+              fontWeight: 700,
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+          />
         </Divider>
-        {["Usuarios", "Inbox"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        <ListItem>
+          <ListItemButton onClick={handleUsers}>
+            <ListItemIcon>
               <ListItemIcon>
-                {index % 2 === 0 ? (
+                <IconButton onClick={handleUsers}>
                   <PeopleIcon sx={{ color: "white" }} />
-                ) : (
-                  <InboxIcon sx={{ color: "white" }} />
-                )}
+                </IconButton>
               </ListItemIcon>
-              <ListItemText primary={text} />
+            </ListItemIcon>
+            <ListItemText primary="Usuarios" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton onClick={handleStatistics}>
+            <ListItemIcon>
+              <ListItemIcon>
+                <IconButton onClick={handleStatistics}>
+                  <AutoGraphIcon sx={{ color: "white" }} />
+                </IconButton>
+              </ListItemIcon>
+            </ListItemIcon>
+            <ListItemText primary="Estadisticas" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton onClick={handleInbox}>
+            <ListItemIcon>
+              <ListItemIcon>
+                <IconButton onClick={handleInbox}>
+                  <InboxIcon sx={{ color: "white" }} />
+                </IconButton>
+              </ListItemIcon>
+            </ListItemIcon>
+            <ListItemText primary="Inbox" />
+          </ListItemButton>
+        </ListItem>
+
+        <Link
+          sx={{ color: "white" }}
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://dashboard.stripe.com/test/payments"
+          underline="none"
+          target="_blank"
+        >
+          <ListItem>
+            <ListItemButton onClick={handleInbox}>
+              <ListItemIcon>
+                <ListItemIcon>
+                  <IconButton onClick={handleInbox}>
+                    <MonetizationOnIcon sx={{ color: "white" }} />
+                  </IconButton>
+                </ListItemIcon>
+              </ListItemIcon>
+              <ListItemText primary="Pagos" />
             </ListItemButton>
           </ListItem>
-        ))}{" "}
-        <ListItem key={"Supscripciones"} disablePadding>
-          <Link
-            sx={{ color: "white" }}
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://dashboard.stripe.com/test/payments"
-            underline="none">
-            <ListItemButton>
-              <ListItemIcon>
-                <MonetizationOnIcon sx={{ color: "white" }} />
-              </ListItemIcon>
-              <ListItemText primary={"Pagos supscripciones"} />
-            </ListItemButton>{" "}
-          </Link>
-        </ListItem>
+        </Link>
       </List>
     </Box>
   );
@@ -114,7 +149,8 @@ export default function AdminSideBar() {
           <Drawer
             anchor={anchor}
             open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}>
+            onClose={toggleDrawer(anchor, false)}
+          >
             {list(anchor)}
           </Drawer>
         </React.Fragment>

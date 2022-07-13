@@ -63,10 +63,10 @@ const MainStyle = styled("div")(({ theme }) => ({
 
 const TABLE_HEAD = [
   { id: "name", label: "Nombre", alignRight: false },
-  { id: "age", label: "Edad", alignRight: false },
   { id: "email", label: "email", alignRight: false },
+  { id: "premium", label: "Es Premium?", alignRight: false },
   { id: "isAdmin", label: "Es administrador?", alignRight: false },
-  { id: "active", label: "Activo?", alignRight: false },
+  { id: "active", label: "Esta activo?", alignRight: false },
   { id: "" },
 ];
 
@@ -204,14 +204,14 @@ export default function AdminUsers2() {
       filterName
     );
 
+    console.log(filteredUsers);
     const isUserNotFound = filteredUsers.length === 0;
     // ban de usuarios
-
-    // console.log(selected)
 
     function banUser() {
       // eslint-disable-next-line prefer-const
       let id = selected[0];
+      /*    let name = selected[] */
       // eslint-disable-next-line prefer-const
       let active = selected[1];
       if (!active) {
@@ -224,10 +224,29 @@ export default function AdminUsers2() {
             Authorization: localStorage.getItem("token"),
           },
         });
+
+        const userSelected = filteredUsers.find((i) => i._id == id);
+        const { name, email } = userSelected;
+        /*   console.log(userSelected, 'USER SELECTED') */
+
+        axios.post(`https://henrymatch-pg.herokuapp.com/send-mail-message`, {
+          name,
+          email,
+        });
       } else {
         const dataBanned = {
           active: false,
         };
+        //ACA LO DE NODEMAILER
+
+        const userSelected = filteredUsers.find((i) => i._id == id);
+        const { name, email } = userSelected;
+        /*   console.log(userSelected, 'USER SELECTED') */
+
+        axios.post(`https://henrymatch-pg.herokuapp.com/send-mail-active`, {
+          name,
+          email,
+        });
 
         axios.put(
           `https://henrymatch-pg.herokuapp.com/usersID/${id}`,
@@ -353,7 +372,7 @@ export default function AdminUsers2() {
                                 name,
                                 email,
                                 active,
-                                age,
+                                premium,
                                 image,
                                 isAdmin,
                               } = row;
@@ -393,8 +412,10 @@ export default function AdminUsers2() {
                                       </Typography>
                                     </Stack>
                                   </TableCell>
-                                  <TableCell align="left">{age}</TableCell>
                                   <TableCell align="left">{email}</TableCell>
+                                  <TableCell align="left">
+                                    {premium ? "Si" : "No"}
+                                  </TableCell>
 
                                   <TableCell align="left">
                                     {isAdmin ? "Si" : "No"}

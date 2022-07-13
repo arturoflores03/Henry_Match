@@ -12,21 +12,81 @@ import { /* updateImg, */ updateUser } from "../../Redux/actions";
 //======ESTILO E IMAGENES
 import "./Form.css";
 import Swal from "sweetalert2";
+import { Box } from "@mui/system";
+import {
+  Autocomplete,
+  Button,
+  Chip,
+  Divider,
+  Fab,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from "@mui/icons-material/Check";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import { NavLink } from "react-router-dom";
 
 //Formik identifica todos los inputs con ese NAME
 // renderer prop: renderizamos el formulario dentro de una funcion y por ahi le vamos a pasar props(valores) de Formik
 // Como es una funcion le puedo poner props e ingreso poniendo props.handleSubmit o sino {}
 
 const interests = [
-  "moda",
-  "artes marciales",
-  "fiestas",
-  "videojuegos",
-  "deportes",
-  "cine",
-  "viajes",
-  "lectura",
-  "programar",
+  "Viajar",
+  "Leer",
+  "Redes Sociales",
+  "Blogging",
+  "Artes",
+  "Escritura",
+  "Cocina",
+  "Baile",
+  "Deportes",
+  "Musica",
+  "Producción Musical",
+  "Yoga",
+  "Idiomas",
+  "Jardinería",
+  "Manualidades",
+  "Maquillaje",
+  "Aprendizaje",
+  "Naturaleza",
+  "Pintura",
+  "Escritura",
+  "Fotografía",
+  "Javascript",
+  "React",
+  "CSS",
+  "Front End",
+  "Back End",
+  "Node",
+  "Java",
+  "Python",
+  "C/C++",
+  "C#",
+  "Swift",
+  "PHP",
+  "Programacion",
+  "Henry",
+  "Proyecto Final",
+  "Proyecto Individual",
+  "Bootcamp",
+  "Checkpoint",
+  "Henry Challenge",
+  "Henry Staff",
+  "Henry Mentor",
+  "Henry Hero",
+  "Technical Assistant",
+  "Pair Programing",
+  "SUP",
+  "Lecture",
+  "Code Review",
 ];
 
 function validate1(input) {
@@ -214,12 +274,50 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
     });
   }
 
+  const handleBanUser = () => {
+    const data = {
+      active: false,
+    };
+
+    axios.put(
+      `https://henrymatch-pg.herokuapp.com/usersID/${userDetail._id}`,
+      data,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    alert("Tu cuenta se ha desactivado, ya no apareceras en la aplicacion");
+  };
+
   return (
     <>
-      <div>
-        <div>
-          <button onClick={closeForm}>X</button>
+      <Box>
+        <Box>
+          <Box display="inline-block" sx={{ paddingLeft: 1 }}>
+            <IconButton size="large" onClick={closeForm} color="info">
+              <CloseIcon />{" "}
+            </IconButton>
+          </Box>
+          <Box sx={{ paddingLeft: 2 }} display="block">
+            <Typography variant="h2">Editar Perfil</Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ bgcolor: "black", paddingLeft: 2 }}>
+          <Box sx={{ display: "inline-block" }}>
+            <Button
+              color="success"
+              name="name"
+              onClick={(e) => uploadImage(e)}
+              sx={{ fontSize: 20 }}
+            >
+              + Foto
+            </Button>
+          </Box>
           <input
+            style={{ background: "black" }}
             className="selectAr"
             type="file"
             ref={fileInput}
@@ -227,202 +325,235 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
               setImage(event.target.files[0]);
             }}
           />
-          <button className="cargar" onClick={uploadImage}>
-            Modificar Imagen
-          </button>
-        </div>
-      </div>
+        </Box>
 
-      <form>
-        <label> Tu nombre: </label>
-
-        <input
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="name"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <TextField
+          label="Tu nombre"
           onChange={handleOnChange}
-          type="text"
           value={input.name}
           name="name"
-          placeholder="Escribe tu nombre"
         />
-        {errors.name && <p className="error">{errors.name}</p>}
-        <button name="name" onClick={(e) => handleSend(e)}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </form>
 
-      <form>
-        {/* EDAD */}
-        <label> Tu edad: </label>
-        <input
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="age"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <TextField
+          label="Tu edad"
           onChange={handleOnChange}
           value={input.age}
-          type="text"
           name="age"
-          placeholder="Escribe tu edad"
         />
-        {errors.age && <p className="error">{errors.age}</p>}
-        <button name="age" onClick={handleSend}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </form>
 
-      <form>
-        {/* EDAD */}
-        <label> Tu numero celular: </label>
-        <input
+        <br />
+        <br />
+
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="phone"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <TextField
           onChange={handleOnChange}
+          label="Tu celular"
           value={input.phone}
           type="text"
           name="phone"
-          placeholder="Escribe tu numero celular"
         />
         {errors.phone && <p className="error">{errors.phone}</p>}
-        <button name="phone" onClick={handleSend}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </form>
 
-      <form>
-        {/* EMAIL */}
-        <label> Tu email: </label>
-        <input
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="city"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <TextField
+          // id="outlined-multiline-static"
+          // label="Tu ciudad"
           onChange={handleOnChange}
           type="text"
-          value={input.email}
-          name="email"
-          placeholder="Escribe tu email"
-        />
-        {errors.email && <p className="error">{errors.email}</p>}
-        <button name="email" onClick={(e) => handleSend(e)}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </form>
-      <form>
-        {/* GENERO */}
-        <label> Tu genero: </label>
-        <select onChange={handleOnChange} value={input.gender} name="gender">
-          <option>Seleccionar</option>
-          <option value={"male"}>Hombre</option>
-          <option value={"female"}>Mujer</option>
-        </select>
-        <button name="gender" onClick={handleSend}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </form>
-      <form>
-        {/* CIUDAD */}
-        <label> Ciudad: </label>
-        <input
-          onChange={handleOnChange}
-          type="text"
+          label="Tu ciudad"
           value={input.city}
           name="city"
-          placeholder="Escribe tu ciudad"
+          placeholder="Tu ciudad"
+          sx={{ display: "inline-block" }}
         />
         {errors.city && <p className="error">{errors.city}</p>}
-        <button name="city" onClick={(e) => handleSend(e)}>
-          Modificar
-        </button>
-      </form>
-      <div>
-        <label> Busco encontrarme con: </label>
-        <select
+
+        <br />
+        <br />
+        <br />
+
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="gender"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <FormControl sx={{ width: 210 }}>
+          <InputLabel id="Tu sexo">Tu sexo</InputLabel>
+          <Select
+            labelId="Tu sexo"
+            onChange={handleOnChange}
+            value={input.gender}
+            name="gender"
+            label="Tu sexo"
+          >
+            <MenuItem value={"male"}>Hombre</MenuItem>
+            <MenuItem value={"female"}>Mujer</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="genderInt"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <FormControl sx={{ width: 210 }}>
+          <InputLabel id="Me interesan">Me gustan</InputLabel>
+          <Select
+            labelId="Me interesan"
+            onChange={(e) => handleOnChange(e)}
+            value={input.genderInt}
+            name="genderInt"
+            label="Me interesan"
+          >
+            <MenuItem value={"male"}>Hombres</MenuItem>
+            <MenuItem value={"female"}> Mujeres</MenuItem>
+            <MenuItem value={"both"}> Ambos</MenuItem>
+          </Select>
+        </FormControl>
+
+        <br />
+        <br />
+        {/* 
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="interests"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <FormControl sx={{ width: 210 }}>
+          <InputLabel id="demo-simple-select-label">Intereses</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            onChange={handleSelect}
+            value={input.interests}
+            name="interests"
+            label="Intereses"
+          >
+            {interests.map((i) => {
+              return (
+                <MenuItem key={i} value={i}>
+                  {i}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        {input.interests &&
+          input.interests.map((i) => (
+            <Button color="secondary" value={i} onClick={handleDeleteInterests}>
+              {i}
+            </Button>
+          ))} */}
+
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="henryLevel"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <FormControl sx={{ width: 210 }}>
+          <InputLabel id="Modulo"> Modulo</InputLabel>
+          <Select
+            labelId="Modulo"
+            onChange={(e) => handleOnChange(e)}
+            value={input.henryLevel}
+            name="henryLevel"
+            label="Modulo"
+          >
+            <MenuItem value={"m1"}>M1</MenuItem>
+            <MenuItem value={"m2"}>M2</MenuItem>
+            <MenuItem value={"m3"}>M3</MenuItem>
+            <MenuItem value={"m4"}>M4</MenuItem>
+            <MenuItem value={"m5"}>M5</MenuItem>
+            <MenuItem value={"m6"}>M6</MenuItem>
+            <MenuItem value={"pi"}>PI</MenuItem>
+            <MenuItem value={"pf"}>PF</MenuItem>
+            <MenuItem value={"graduate"}>Graduado</MenuItem>
+          </Select>
+        </FormControl>
+
+        <br />
+        <br />
+        <br />
+
+        <Box sx={{ display: "inline-block" }}>
+          <Button
+            color="success"
+            name="description"
+            onClick={(e) => handleSend(e)}
+            sx={{ fontSize: 25 }}
+          >
+            ✓{" "}
+          </Button>
+        </Box>
+        <TextField
+          id="outlined-multiline-static"
+          label="Tu descripcion"
+          multiline
+          rows={3}
           onChange={handleOnChange}
-          type="text"
-          value={input.genderInt}
-          name="genderInt">
-          <option disabled>Seleccionar</option>
-          <option value="male">Hombre</option>
-          <option value="female">Mujeres</option>
-          <option value="both">Hombres o Mujeres</option>
-        </select>
-        <button name="genderInt" onClick={handleSend}>
-          Modificar
-        </button>
-      </div>
-      <div>
-        {/* INTERESES */}
-        <label> Intereses: </label>
-        <select
-          onChange={handleSelect}
-          type="text"
-          value={input.interests}
-          name="interests">
-          <option key={"i"} value={""} disabled>
-            Ingresa tu interes
-          </option>
-          {interests.map((i) => {
-            return (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            );
-          })}
-        </select>
-        <button name="interests" onClick={handleSendInterests}>
-          Modificar
-        </button>
-      </div>
-      <div /* className="formsubtitle" */>
-        <p> HAS ELEGIDO:</p>
-        <ul>
-          {input.interests &&
-            input.interests.map((i) => (
-              <div key={i} className="typeselected">
-                <p>{i}</p>
-                <button
-                  className="delbutton"
-                  value={i}
-                  onClick={handleDeleteInterests}>
-                  x
-                </button>
-              </div>
-            ))}
-        </ul>
-      </div>
-      <div>
-        {/* HENRYLEVEL */}
-        <label> Mi etapa en el Bootcamp de Henry </label>
-        <select
-          onChange={handleOnChange}
-          value={input.henryLevel}
-          type="text"
-          name="henryLevel">
-          <option>Seleccionar</option>
-          <option value="m1">M1</option>
-          <option value="m2">M2</option>
-          <option value="m3">M3</option>
-          <option value="m4">M4</option>
-          <option value="m5">M5</option>
-          <option value="m6">M6</option>
-          <option value="pi">PI</option>
-          <option value="pf">PF</option>
-          <option value="graduate">Graduado</option>
-        </select>
-        <button name="henryLevel" onClick={handleSend}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </div>
-      <form>
-        <label> Sobre mi: </label>
-        <textarea
-          onChange={handleOnChange}
-          type="text"
           value={input.description}
           name="description"
         />
-        <button name="description" onClick={handleSend}>
-          {" "}
-          Modificar{" "}
-        </button>
-      </form>
 
-      {/* <form>
+        {/* <form>
         <label> Dejanos tu comentario: </label>
         <textarea
           onChange={handleOnChange}
@@ -435,6 +566,21 @@ const Formu = ({ setUpdate, setUpdateForm }) => {
           Modificar{" "}
         </button>
       </form> */}
+        <br />
+        <br />
+        <Box display="inline-block" sx={{ paddingLeft: 2 }}>
+          <NavLink to={"/home"}>
+            <Button
+              size="large"
+              onClick={handleBanUser}
+              variant="contained"
+              color="secondary"
+            >
+              <Typography sx={{ color: "white" }}>ELIMINAR CUENTA</Typography>
+            </Button>
+          </NavLink>
+        </Box>
+      </Box>
     </>
   );
 };

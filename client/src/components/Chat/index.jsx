@@ -6,6 +6,8 @@ import Header from "../Header/Header";
 import ChatNavBar from "./ChatNavBar";
 import MyNetwork from "./MyNetwork";
 import PerfilChat from "./PerfilChat";
+import ReviewCarouselHM from "../../components/Reviews/ReviewCarouselHM";
+import Invitation2 from "../../components/Reviews/Invitation2";
 
 const Chat = ({ userDetail, users, userMatches }) => {
   const [render, setRender] = useState("contactos");
@@ -25,7 +27,18 @@ const Chat = ({ userDetail, users, userMatches }) => {
           <PerfilChat />
         </Box>
       )}
-
+      <Box
+        sx={{
+          mt: 10,
+          maxWidth: 600,
+          width: { md: "100%" },
+          paddingBottom: 10,
+          marginTop: -10,
+        }}
+      >
+        <ReviewCarouselHM users={users} />
+        <Invitation2 userDetail={userDetail} />{" "}
+      </Box>
       <AdminBottomBar />
     </Box>
   );

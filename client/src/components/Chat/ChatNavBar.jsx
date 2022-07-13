@@ -24,6 +24,8 @@ import Loader from "../Loader/Loader";
 import AdminSideBar from "./ChatSideBar";
 import ChatSideBar from "./ChatSideBar";
 import MailIcon from "@mui/icons-material/Mail";
+import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 const ChatNavBar = ({ setRender }) => {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
@@ -48,14 +50,32 @@ const ChatNavBar = ({ setRender }) => {
             <Toolbar>
               <ChatSideBar setRender={setRender} />
               {/* DESKTOP */}
+              <Tooltip title="Solo estoy trabajando!">
+                <NavLink to="/desktop">
+                  <IconButton>
+                    <WorkHistoryIcon sx={{ color: "primary.light" }} />
+                  </IconButton>
+                </NavLink>
+              </Tooltip>
               <Box sx={{ flexGrow: 1 }} />
 
               {/* PROFILE */}
+              <Tooltip title="MATCHEA">
+                <NavLink to={"/home"}>
+                  <IconButton size="large" aria-label="show 4 new mails">
+                    <LocalFireDepartmentIcon
+                      fontSize="large"
+                      sx={{ color: "primary.main" }}
+                    />
+                  </IconButton>
+                </NavLink>
+                {/* MATCHS */}
+              </Tooltip>
               <Box sx={{ display: { xs: "flex", md: 900 } }}>
                 <Tooltip title={`${user.name.substring(0, 1)} perfil`}>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      src={userDetail?.picture}
+                      src={userDetail?.image}
                       alt={user.name.substring(0, 1)}
                     />
                   </IconButton>
@@ -76,17 +96,17 @@ const ChatNavBar = ({ setRender }) => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem key={"profile"} onClick={handleCloseUserMenu}>
-                    <NavLink to={"/"}>
+                  <NavLink to={"/profile"}>
+                    <MenuItem key={"profile"} onClick={handleCloseUserMenu}>
                       <Typography
                         textAlign="center"
                         sx={{ textDecoration: "none", color: "light.main" }}
                       >
-                        Regresar
+                        Mi Perfil
                       </Typography>
-                    </NavLink>
-                    {/* MENU: LOGOUT  */}
-                  </MenuItem>
+                      {/* MENU: LOGOUT  */}
+                    </MenuItem>
+                  </NavLink>
                   <MenuItem
                     key={"logout"}
                     onClick={() => logout({ returnTo: window.location.origin })}

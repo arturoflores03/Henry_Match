@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 //======IMPORTACIONES DE COMPONENTES
@@ -23,6 +24,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import InputLabel from "@mui/material/InputLabel";
 import Swal from "sweetalert2";
+import { Typography } from "@mui/material";
+import { fontSize } from "@mui/system";
 
 //FORMULARIO INICIAL
 const initialForm = {
@@ -30,13 +33,23 @@ const initialForm = {
   age: "",
   nickname: "",
   email: "",
+  premium: false,
+  isAdmin: false,
+  active: true,
+  role: "default",
   image: "",
-  description: "",
   gender: "",
   genderInt: "",
-  password: null,
-  likeGiven: [],
+  description: "",
+  dislikeReceived: [],
   likeRecieved: [],
+  likeGiven: [],
+  dislike: [],
+  matches: [],
+  interests: [],
+  city: "",
+  review: "",
+  rating: 0,
 };
 
 const Modal = ({ modal, setModal, setNewUser }) => {
@@ -52,6 +65,8 @@ const Modal = ({ modal, setModal, setNewUser }) => {
   const [errors, setErrors] = useState({});
   //INPUT NAME
   const [nameInput, setNameInput] = useState("");
+  //CHECK
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     setUserForm({
@@ -78,7 +93,7 @@ const Modal = ({ modal, setModal, setNewUser }) => {
   function handleChangeAge(e) {
     e.preventDefault();
     const { name, value } = e.target;
-    if (value < 18 && value > 90) {
+    if (value < 18 || value > 90) {
       setErrors({ ...errors, age: "No tenés edad para estar por aquí" });
     } else {
       setUserForm({
@@ -97,22 +112,34 @@ const Modal = ({ modal, setModal, setNewUser }) => {
       [name]: value,
     });
   }
+  //CHECK
+  function handleCheck() {
+    check === false ? setCheck(true) : setCheck(false);
+  }
 
   //CREO UN USUARIO NUEVO
   function handleSubmit(e) {
     e.preventDefault();
     //INGRESO EL NOMBRE EN EL FORM SETEANDOLO, LA PRIMERA LETRA EN MAYUSCULA Y EL RESTO MINUSCULA
-    setUserForm({
-      ...userForm,
-      name: setterName(nameInput),
-    });
-    setNameInput("");
+    if (nameInput === "") {
+      setErrors({ ...errors, msg: "todos los campos son requeridos" });
+      setTimeout(() => {
+        setErrors(errors.age ? { age: "No tenés edad para estar aquí" } : {});
+      }, 2000);
+      return;
+    } else {
+      setUserForm({
+        ...userForm,
+        name: setterName(nameInput),
+      });
+      setNameInput("");
+    }
     //VALIDACIÓN
     const { gender, genderInt, name, age } = userForm;
     if ([gender, genderInt, name, age].includes("")) {
       setErrors({ ...errors, msg: "todos los campos son requeridos" });
       setTimeout(() => {
-        setErrors(errors.age ? { age: "Tenes que ser mayor de edad" } : {});
+        setErrors(errors.age ? { age: "No tenés edad para estar aquí" } : {});
       }, 2000);
       return;
     }
@@ -173,14 +200,20 @@ const Modal = ({ modal, setModal, setNewUser }) => {
                 type="number"
                 name="age"
                 onChange={handleChangeAge}></input>
-              {errors.age && <p>{errors.age}</p>}
+              {/* #f94242 */}
+              {errors.age && (
+                <Typography color="secondary">{errors.age}</Typography>
+              )}
             </div>
             {/* EL GENERO DEL USUARIO */}
             <div>
               <InputLabel htmlFor="gender">eres (género):</InputLabel>
               <select name="gender" onChange={handleChange} required>
-                <option value="male">hombre</option>
-                <option value="female">mujer</option>
+                <option disabled selected>
+                  SELECCIONAR
+                </option>
+                <option value="male">HOMBRE</option>
+                <option value="female">MUJER</option>
               </select>
             </div>
             {/* EL GENERO QUE LE INTERESA VER AL USUARIO */}
@@ -189,14 +222,38 @@ const Modal = ({ modal, setModal, setNewUser }) => {
                 y te interesa encontrar:
               </InputLabel>
               <select name="genderInt" onChange={handleChange} required>
-                <option value="both">ambos</option>
-                <option value="male">hombres</option>
-                <option value="female">mujeres</option>
+                <option disabled selected>
+                  SELECCIONAR
+                </option>
+                <option value="both">AMBOS</option>
+                <option value="male">HOMBRES</option>
+                <option value="female">MUJERES</option>
               </select>
             </div>
-            {errors.msg && <p>{errors.msg}</p>}
+            {errors.msg && (
+              <Typography color="secondary">{errors.msg}</Typography>
+            )}
+            {/* TERMINOS Y CONDICIONES */}
+            <div className="terms">
+              <InputLabel htmlFor="terms" sx={{ textDecoration: "none" }}>
+                <input type="checkbox" id="terms" onClick={handleCheck} />
+                Acepto los{" "}
+                <NavLink
+                  style={{
+                    color: "white",
+                  }}
+                  to="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  términos y condiciones
+                </NavLink>
+              </InputLabel>
+            </div>
+
             <DialogActions>
-              <button type="submit">LISTO, QUE TE DIVIERTAS!</button>
+              <button type="submit" id="send" disabled={!check}>
+                LISTO, QUE TE DIVIERTAS!
+              </button>
             </DialogActions>
           </form>
           <p>En tu perfil podras agregar fotos y más información sobre vos</p>

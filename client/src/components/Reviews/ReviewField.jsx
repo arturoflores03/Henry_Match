@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 //======IMPORTACIONES DE COMPONENTES
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
-import { updateUser } from "../../Redux/actions";
+import { updateUser, createUser } from "../../Redux/actions";
 
 //======ESTILO E IMAGENES
 import "./ReviewField.css";
@@ -36,7 +36,7 @@ import imgp7 from "./UsersImg/pareja/7.jpg";
 
 const initialForm = {
   review: "",
-  ranting: 2.5,
+  rating: 2.5,
 };
 
 const labels = {
@@ -49,15 +49,16 @@ const labels = {
   3.5: "Va bastante Bien",
   4: "Tiene toda la onda",
   4.5: "Excelente",
-  5: "Excelentisima!!",
+  5: "Perfecta!",
 };
 
 function getLabelText(rating) {
   return `${rating} Star${rating !== 1 ? "s" : ""}, ${labels[rating]}`;
 }
 
-const ReviewField = ({ userDetail }) => {
+const ReviewField = () => {
   const dispatch = useDispatch();
+  const userDetail = useSelector((state) => state.userDetail);
   //VALORACION
   const [rating, setRating] = useState(2);
   const [hover, setHover] = useState();
@@ -96,8 +97,7 @@ const ReviewField = ({ userDetail }) => {
       return;
     } else {
       dispatch(updateUser(userDetail._id, { reviewForm }));
-      console.log(data);
-      console.log(respuesta);
+      alert("Tu review se envio con exito");
       //ALERT
       /* Swal.fire({
         position: "center",
@@ -121,14 +121,16 @@ const ReviewField = ({ userDetail }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}>
+        }}
+      >
         <CardContent>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-            }}>
+            }}
+          >
             <CardMedia
               component="img"
               image={imgp6}
@@ -142,7 +144,8 @@ const ReviewField = ({ userDetail }) => {
                   p: 2,
                   mb: 1,
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <Box
                   sx={{
                     p: 2,
@@ -151,7 +154,8 @@ const ReviewField = ({ userDetail }) => {
                     flexDirection: "column",
                     alignItems: "center",
                     textAlign: "center",
-                  }}>
+                  }}
+                >
                   <Typography component="legend" variant="h5">
                     Que te parece Henry Match?
                   </Typography>
@@ -191,13 +195,15 @@ const ReviewField = ({ userDetail }) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   <Typography
                     component="legend"
                     variant="h6"
                     sx={{
                       m: 3,
-                    }}>
+                    }}
+                  >
                     Agregá un comentario:{" "}
                   </Typography>
                   <TextField
@@ -218,7 +224,8 @@ const ReviewField = ({ userDetail }) => {
                   {errors.msg && (
                     <Typography
                       sx={{ size: "small", color: "#dc3107ed" }}
-                      color="warning">
+                      color="warning"
+                    >
                       {errors.msg}
                     </Typography>
                   )}

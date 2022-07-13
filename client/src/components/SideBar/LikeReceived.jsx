@@ -9,17 +9,13 @@ import {
   Avatar,
   Button,
   Divider,
-
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ButtonBases from './../Buttoms/ButtomImg';
-
-
-
+import ButtonBases from "./../Buttoms/ButtomImg";
 import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -32,14 +28,11 @@ import AddIcon from "@mui/icons-material/Add";
 import DiamondIcon from "@mui/icons-material/Diamond";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import {Fade, Link, Tooltip } from "@mui/material";
+import { Fade, Link, Tooltip } from "@mui/material";
 import Favorite from "@mui/icons-material/Favorite";
 import Modal from "@mui/material/Modal";
 
 import Carousel from "react-material-ui-carousel";
-
-
-
 
 const StyledFab = styled(Fab)({
   position: "absolute",
@@ -79,7 +72,6 @@ var items = [
   },
 ];
 
-
 const DisplayLikeReceived = () => {
   const [likeRec, setlikeRec] = useState(null);
   const currentUser = useSelector((state) => state.userDetail);
@@ -87,37 +79,25 @@ const DisplayLikeReceived = () => {
   const dispatch = useDispatch();
   const myID = currentUser?._id;
 
-
   const [index, setIndex] = useState(0);
-
 
   const likesUserIds = currentUser?.likeReceived.map((e) => e);
   const likesRec = [...new Set(likesUserIds)];
 
   const handleOpen = () => setPremium(true);
   const handleClose = () => setPremium(false);
-  const [premiums, setPremiums] = useState(false)
+  const [premiums, setPremiums] = useState(false);
 
-  function setPremiumc(){
-    if(currentUser.premium){
-      setPremiums(true)
+  function setPremiumc() {
+    if (currentUser.premium) {
+      setPremiums(true);
     }
   }
-useEffect(()=>{
-
-setPremiumc()
-  
-}, [])
-
-  //console.log("arrLikesRec",arrLikesRec)
-
-  // useEffect(
-  //   () => {
-  //     dispatch(getUsers());
-  //   },[ ]);
+  useEffect(() => {
+    setPremiumc();
+  }, []);
 
   const usersReceived = db.filter((e) => e.likeGiven.includes(myID));
-  // console.log("usersReceived", usersReceived);
 
   return (
     <div>
@@ -143,40 +123,41 @@ setPremiumc()
         ))
       ) : (
         <>
-        <Typography align="center">Solo usuarios Premium</Typography>
-        <Modal open={premiums} onClose={handleClose}>
-        <Box sx={style}>
-          <ButtonBases />
-          <Carousel
-            index={index}
-            /*    onChange={handleChange} */
-            interval={4500}
-            animation="slide"
-            indicators={false}
-            stopAutoPlayOnHover
-            swipe
-            sx={{
-              position: "relative",
-              top: -140,
-              left: 1 / 2,
-              textAlign: "center",
-              fontSize: 15,
-              fontWeight: "bold",
-              letterSpacing: 2,
-              wordSpacing: 2,
-              color: "#fff",
-              /*   fontWeight: "normal", */
-              textDecoration: "none",
-              fontStyle: "normal",
-              fontVariant: "normal",
-              textTransform: "none",
-            }}>
-            {items.map((item, i) => (
-              <Item key={i} item={item} />
-            ))}
-          </Carousel>
-        </Box>
-      </Modal>
+          <Typography align="center">Solo usuarios Premium</Typography>
+          <Modal open={premiums} onClose={handleClose}>
+            <Box sx={style}>
+              <ButtonBases />
+              <Carousel
+                index={index}
+                /*    onChange={handleChange} */
+                interval={4500}
+                animation="slide"
+                indicators={false}
+                stopAutoPlayOnHover
+                swipe
+                sx={{
+                  position: "relative",
+                  top: -140,
+                  left: 1 / 2,
+                  textAlign: "center",
+                  fontSize: 15,
+                  fontWeight: "bold",
+                  letterSpacing: 2,
+                  wordSpacing: 2,
+                  color: "#fff",
+                  /*   fontWeight: "normal", */
+                  textDecoration: "none",
+                  fontStyle: "normal",
+                  fontVariant: "normal",
+                  textTransform: "none",
+                }}
+              >
+                {items.map((item, i) => (
+                  <Item key={i} item={item} />
+                ))}
+              </Carousel>
+            </Box>
+          </Modal>
         </>
       )}
     </div>

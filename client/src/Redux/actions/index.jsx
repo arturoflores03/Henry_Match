@@ -27,7 +27,8 @@ import axios from "axios";
 //URL PARA LOS USUARIOS
 //const url = "/users";
 //
-const baseUrl = process.env.VITE_VERCEL_URL || "http://localhost:9000";
+/* const baseUrl = process.env.VITE_VERCEL_URL || "http://localhost:9000"; */
+const baseUrl = "https://henrymatch-pg.herokuapp.com" ; 
 
 //----THUNK FUNCTIONS---// LAS QUE HACEN REQUIRES A LA DB Y SON ASINCRONAS
 export function getUsers() {

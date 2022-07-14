@@ -25,10 +25,7 @@ import Modal from "@mui/material/Modal";
 import ButtonBases from "../Buttoms/ButtomImg";
 import Carousel from "react-material-ui-carousel";
 
-
-
 // import ChatBox from "../ChatBox/Container";
-
 
 const StyledFab = styled(Fab)({
   position: "absolute",
@@ -64,17 +61,13 @@ var items = [
   },
   {
     name: "Random Name #3",
-    description: "FILTRA POR EDAD",
+    description: "SUSCRIPCION DE UN SOLO PAGO",
   },
 ];
 
 export default function BottomBar({ premium, setPremium, userDetail }) {
   const handleOpen = () => setPremium(true);
   const handleClose = () => setPremium(false);
-
-
-
-
 
   const [index, setIndex] = React.useState(0);
   const handleChange = (cur: number, prev: number) => {
@@ -118,58 +111,55 @@ export default function BottomBar({ premium, setPremium, userDetail }) {
         </Box>
       </Modal>
       <CssBaseline />
-      
+
       <AppBar position="fixed" color="inherit" sx={{ top: "auto", bottom: 0 }}>
         <Toolbar>
-       
-          {
-            userDetail && userDetail.premium ===true ? (
-             
-              <Tooltip title="YA ERES PREMIUM">
-                <StyledFab
-                  color="primary"
-                  aria-label="add"
-                  sx={{ width: 60, height: 60 }}
-                 /*  onClick={handleOpen} */>
-                  <DiamondIcon
-                    sx={{
-                      color: "dark.main",
-                      "&:hover": { color: "primary.main" },
-                    }}
-                    fontSize="large"
-                  />
-                </StyledFab>
-              </Tooltip>) : (
-              <Tooltip title="PREMIUM">
-                <StyledFab
-                  color="primary"
-                  aria-label="add"
-                  sx={{ width: 60, height: 60 }}
-                  onClick={handleOpen}>
-                  <DiamondIcon
-                    sx={{
-                      color: "dark.main",
-                      "&:hover": { color: "primary.main" },
-                    }}
-                    fontSize="large"
-                  />
-                </StyledFab>
-              </Tooltip>
-            )
-          }
-
+          {userDetail && userDetail.premium === true ? (
+            <Tooltip title="YA ERES PREMIUM">
+              <StyledFab
+                color="primary"
+                aria-label="add"
+                sx={{ width: 60, height: 60 }}
+                /*  onClick={handleOpen} */
+              >
+                <DiamondIcon
+                  sx={{
+                    color: "dark.main",
+                    "&:hover": { color: "primary.main" },
+                  }}
+                  fontSize="large"
+                />
+              </StyledFab>
+            </Tooltip>
+          ) : (
+            <Tooltip title="PREMIUM">
+              <StyledFab
+                color="primary"
+                aria-label="add"
+                sx={{ width: 60, height: 60 }}
+                onClick={handleOpen}>
+                <DiamondIcon
+                  sx={{
+                    color: "dark.main",
+                    "&:hover": { color: "primary.main" },
+                  }}
+                  fontSize="large"
+                />
+              </StyledFab>
+            </Tooltip>
+          )}
 
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="body2" color="text.secondary">
-            <Link color="inherit" href="#">
+            <NavLink to="/terms" style={{ color: "white" }}>
               Henry Match
-            </Link>{" "}
+            </NavLink>{" "}
             {new Date().getFullYear()}
             {". "}
             Hecho con <Favorite fontSize="small" color="primary" /> por{" "}
-            <Link color="inherit" href="#">
+            <NavLink to="/matchteam" style={{ color: "white" }}>
               alumnos
-            </Link>{" "}
+            </NavLink>{" "}
             de Henry
           </Typography>
         </Toolbar>

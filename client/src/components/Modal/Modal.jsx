@@ -8,13 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 //======IMPORTACIONES DE COMPONENTES
 
 //======IMPORTACIONES DE FUNCIONES NUESTRAS
-import {
-  createUser,
-  getUserByNick,
-  filterByGender,
-  filterByMe,
-} from "../../Redux/actions/index";
-import setterName from "./helpers.js";
+import { createUser, filterByMe } from "../../Redux/actions/index";
 
 //======ESTILO E IMAGENES
 import Dialog from "@mui/material/Dialog";
@@ -26,6 +20,8 @@ import InputLabel from "@mui/material/InputLabel";
 import Swal from "sweetalert2";
 import { Typography } from "@mui/material";
 import { fontSize } from "@mui/system";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import { Box } from "@mui/material";
 
 //FORMULARIO INICIAL
 const initialForm = {
@@ -71,7 +67,6 @@ const Modal = ({ modal, setModal, setNewUser }) => {
   useEffect(() => {
     setUserForm({
       ...userForm,
-      name: user?.name,
       nickname: user?.sub,
       email: user?.email,
       image: user?.picture,
@@ -86,7 +81,11 @@ const Modal = ({ modal, setModal, setNewUser }) => {
   //OBTENGO NOMBRE USUARIO PARA CREAR EL USUARIO
   function handleChangeName(e) {
     e.preventDefault();
-    setNameInput(e.target.value);
+    const { name, value } = e.target;
+    setUserForm({
+      ...userForm,
+      [name]: value,
+    });
   }
 
   //OBTENGO  LA EDAD DEL USUARIO
@@ -120,20 +119,7 @@ const Modal = ({ modal, setModal, setNewUser }) => {
   //CREO UN USUARIO NUEVO
   function handleSubmit(e) {
     e.preventDefault();
-    //INGRESO EL NOMBRE EN EL FORM SETEANDOLO, LA PRIMERA LETRA EN MAYUSCULA Y EL RESTO MINUSCULA
-    if (nameInput === "") {
-      setErrors({ ...errors, msg: "todos los campos son requeridos" });
-      setTimeout(() => {
-        setErrors(errors.age ? { age: "No tenés edad para estar aquí" } : {});
-      }, 2000);
-      return;
-    } else {
-      setUserForm({
-        ...userForm,
-        name: setterName(nameInput),
-      });
-      setNameInput("");
-    }
+
     //VALIDACIÓN
     const { gender, genderInt, name, age } = userForm;
     if ([gender, genderInt, name, age].includes("")) {
@@ -175,12 +161,18 @@ const Modal = ({ modal, setModal, setNewUser }) => {
             handleClose();
           }
         }}>
-        <DialogTitle>HENRY MATCH - CREAR USUARIO</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Contá más sobre vos a la comunidad Henry
-          </DialogContentText>
-        </DialogContent>
+        <Box textAlign="center" alignItems="center" alignContent="center">
+          <DialogTitle>HENRY MATCH - CREAR USUARIO</DialogTitle>
+          <LocalFireDepartmentIcon
+            color="primary"
+            fontSize="large"></LocalFireDepartmentIcon>
+          <DialogContent>
+            <DialogContentText>
+              Contá más sobre vos a la comunidad Henry
+            </DialogContentText>
+          </DialogContent>
+        </Box>
+
         <DialogContent>
           <form onSubmit={handleSubmit}>
             {/* EL NOMBRE DEL USUARIO */}

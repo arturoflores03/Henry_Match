@@ -36,7 +36,7 @@ import imgp7 from "./UsersImg/pareja/7.jpg";
 
 const initialForm = {
   review: "",
-  rating: 2.5,
+  rating: 2,
 };
 
 const labels = {
@@ -62,7 +62,7 @@ const ReviewField = () => {
   //VALORACION
   const [rating, setRating] = useState(2);
   const [hover, setHover] = useState();
-  const [reviewForm, setReviewForm] = useState({ initialForm });
+  const [reviewForm, setReviewForm] = useState(initialForm);
 
   //PARA RENDERIZAR ALGUN ERROR DE LA VALIDACION
   const [errors, setErrors] = useState({});
@@ -96,23 +96,19 @@ const ReviewField = () => {
 
       return;
     } else {
-      dispatch(updateUser(userDetail._id, { reviewForm }));
+
+      dispatch(updateUser(userDetail._id, reviewForm));
+     
+     
+      //ALERT
       Swal.fire({
-        position: "center",
+        position: "top-end ",
+        grow: "row",
         icon: "success",
-        title:"Tu review se envio con exito",
+        title: "Gracias por tu opinión y a seguir disfrutando!",
         showConfirmButton: false,
         timer: 1500,
       });
-     /*  alert("Tu review se envio con exito"); */
-      //ALERT
-      /* Swal.fire({
-        position: "center",
-        icon: response === "ok" ? "success" : "error",
-        title: response === "ok" ? "Operación realizada con éxito!" : response,
-        showConfirmButton: false,
-        timer: 2800,
-      }); */
 
       //LIMPIO LOS ESTADOS LOCALES
       setReviewForm({ initialForm });
@@ -128,16 +124,14 @@ const ReviewField = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}
-      >
+        }}>
         <CardContent>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-            }}
-          >
+            }}>
             <CardMedia
               component="img"
               image={imgp6}
@@ -151,8 +145,7 @@ const ReviewField = () => {
                   p: 2,
                   mb: 1,
                   alignItems: "center",
-                }}
-              >
+                }}>
                 <Box
                   sx={{
                     p: 2,
@@ -161,8 +154,7 @@ const ReviewField = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     textAlign: "center",
-                  }}
-                >
+                  }}>
                   <Typography component="legend" variant="h5">
                     Que te parece Henry Match?
                   </Typography>
@@ -202,15 +194,13 @@ const ReviewField = () => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Typography
                     component="legend"
                     variant="h6"
                     sx={{
                       m: 3,
-                    }}
-                  >
+                    }}>
                     Agregá un comentario:{" "}
                   </Typography>
                   <TextField
@@ -231,8 +221,7 @@ const ReviewField = () => {
                   {errors.msg && (
                     <Typography
                       sx={{ size: "small", color: "#dc3107ed" }}
-                      color="warning"
-                    >
+                      color="warning">
                       {errors.msg}
                     </Typography>
                   )}
